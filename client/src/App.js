@@ -1,5 +1,5 @@
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import './App.css';
+import './App.sass';
 import Signup from './pages/Signup';
 
 function App() {
@@ -9,8 +9,8 @@ function App() {
     <Routes>
       <Route path="/" element={
         <div className="container">
-          <h1 className="title">크로노트</h1>
-          <p className="subtitle">할 일을 작성하고 매일을 기록해보세요.</p>
+          <h1 className="title">ChroNote</h1>
+          <p className="subtitle">작은 계획이 큰 변화를 만듭니다. 오늘 할 일을 적어보세요.</p>
           <div className="button-group">
             <button onClick={() => navigate('/signup')}>회원가입</button>
             <button onClick={() => navigate('/login')}>로그인</button>
