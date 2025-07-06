@@ -1,23 +1,16 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import './css/App.sass';
+import { Routes, Route } from 'react-router-dom';
+import FirstPage from './pages/FirstPage';
 import Signup from './pages/Signup';
+import Login from './pages/Login';
+import Main from './pages/Main';
 
 function App() {
-  const navigate = useNavigate();
-
   return (
-    <Routes>
-      <Route path="/" element={
-        <div className="container">
-          <h1 className="title">ChroNote</h1>
-          <p className="subtitle">작은 계획이 큰 변화를 만듭니다. 오늘 할 일을 적어보세요.</p>
-          <div className="button-group">
-            <button onClick={() => navigate('/signup')}>회원가입</button>
-            <button onClick={() => navigate('/login')}>로그인</button>
-          </div>
-        </div>
-      } />
+    <Routes>      
+      <Route path="/" element={<FirstPage />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/main" element={<Main />}></Route>
     </Routes>
   );
 }

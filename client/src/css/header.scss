@@ -1,0 +1,80 @@
+@import "./_utils.scss";
+
+.header {
+  position: fixed;            
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;               
+  height: 60px;
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 32px;
+  font-family: $font-family;
+  
+  
+  .nav-group {                     
+  display: flex;
+  align-items: center;
+  gap: 32px;                    
+}
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+
+    .logo {
+        height: 32px; 
+        width: auto; 
+        object-fit: contain; 
+        margin-right: 10px;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+      color: $main-color;
+    }
+  }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+     margin-left: 40px; 
+    gap: 24px;
+
+    .nav-item {
+      text-decoration: none;
+      color: $text-color;
+      font-weight: 500;
+    }
+  }
+
+    .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .nav-item {
+    text-decoration: none;
+    color: $text-color;
+    font-weight: 500;
+
+    display: flex;              
+    align-items: center;         
+    height: 36px;                
+  }
+
+  .get-started {
+    background-color: $main-color;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  }
+}

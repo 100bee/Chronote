@@ -1,0 +1,15 @@
+@import "./_utils.scss";
+
+.main-content {
+  padding-top: 60px; 
+  padding-left: 24px;
+  padding-right: 24px;
+  min-height: 100vh;
+  background-color: $bg-color;
+  color: $text-color;
+  font-family: $font-family;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
