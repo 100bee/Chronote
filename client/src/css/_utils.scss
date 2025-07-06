@@ -1,0 +1,43 @@
+// 색상 변수
+$main-color: #4c84ff;
+$text-color: #333;
+$bg-color: #f9f9f9;
+
+// 폰트
+$font-family: 'Pretendard', sans-serif;
+$font-lg: 24px;
+$font-md: 16px;
+$font-sm: 12px;
+
+// 공통 믹스인
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin button-style($bg-color: $main-color) {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: $bg-color;
+  color: white;
+  cursor: pointer;
+}
+
+// 유틸리티 클래스
+.flex-center {
+  @include flex-center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 20px;
+}
+
+.mb-2 {
+  margin-bottom: 20px;
+}
