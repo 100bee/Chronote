@@ -1,6 +1,7 @@
 // src/pages/Login.js
 import axios from 'axios';
 import { useState } from 'react';
+import '../css/login.scss';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -14,32 +15,47 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:3001/login', form);
       alert('로그인 성공!');
-      console.log(response.data); // 필요시 토큰 또는 사용자 정보 저장
     } catch (error) {
-      console.error(error);
       alert('로그인 실패');
     }
   };
 
   return (
-    <div style={{ padding: '50px' }}>
-      <h1>로그인</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="email"
-          placeholder="이메일"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="비밀번호"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <button type="submit">로그인</button>
-      </form>
+    <div className="login-wrapper">
+      <div className="login-box">
+        <h1 className="logo">ChroNote</h1>
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input
+            name="email"
+            placeholder="아이디 또는 이메일"
+            value={form.email}
+            onChange={handleChange}
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="비밀번호"
+            value={form.password}
+            onChange={handleChange}
+          />
+
+          <div className="options">
+            <label>
+              <input type="checkbox" />
+              로그인 상태 유지
+            </label>
+          </div>
+
+          <button type="submit" className="login-btn">로그인</button>
+          <button type="button" className="passkey-btn">미정</button>
+        </form>
+
+        <div className="links">
+          <a href="#">비밀번호 찾기</a>
+          <a href="#">아이디 찾기</a>
+          <a href="#">회원가입</a>
+        </div>
+      </div>
     </div>
   );
 }
