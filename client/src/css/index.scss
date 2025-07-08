@@ -1,0 +1,35 @@
+@import "./_utils.scss";
+
+body {
+  font-family: $font-family;
+  background-color: $bg-color;
+  margin: 0;
+  padding: 0;
+  color: $text-color;
+}
+
+.container {
+  @include flex-center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.title {
+  font-size: $font-lg;
+  color: $main-color;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: $font-md;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+
+  button {
+    @include button-style();
+  }
+}

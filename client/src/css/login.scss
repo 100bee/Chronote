@@ -1,0 +1,111 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #fff;
+
+  .login-box {
+    width: 400px;
+
+
+    padding: 40px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+
+    .logo {
+      font-size: 32px;
+      color: #4c84ff;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      input {
+        padding: 14px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: border 0.3s;
+
+        &:focus {
+          border: 1px solid #4c84ff;
+          outline: none;
+        }
+      }
+
+      .options {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin: 6px 0 12px;
+
+        .ip-secure {
+          .toggle {
+            background-color: #4c84ff;
+            color: #fff;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 11px;
+            margin-left: 4px;
+          }
+        }
+      }
+
+      .login-btn {
+        padding: 12px;
+        background-color: #4c84ff;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        font-size: 15px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #3a6fdb;
+        }
+      }
+
+      .passkey-btn {
+        padding: 12px;
+        background-color: white;
+        color: #4c84ff;
+        border: 1px solid #4c84ff;
+        border-radius: 4px;
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 8px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #f9fff9;
+        }
+      }
+    }
+
+    .links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 13px;
+
+      a {
+        color: #666;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

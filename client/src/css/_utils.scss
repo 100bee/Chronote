@@ -1,0 +1,30 @@
+// src/css/_utils.scss
+
+// ✅ 변수 정의
+$font-family: 'Noto Sans KR', sans-serif;
+$bg-color: #f5f5f5;
+$text-color: #333;
+$font-lg: 32px;
+$font-md: 18px;
+$main-color: #4c84ff;
+
+// ✅ mixin 정의 (index.scss에서 사용 중)
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin button-style() {
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: $main-color;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($main-color, 5%);
+  }
+}
