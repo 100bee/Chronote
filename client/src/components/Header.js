@@ -6,8 +6,8 @@ function Header() {
     <header className="header">
         <div className='nav-group'>
               <div className="nav-left">
-                <img src="/favicon2.png" alt="Chronote logo" className='logo'/>
-                <span className="brand">Chronote</span>
+                <img src="/favicon.png" alt="Chronote logo" className='logo'/>
+                <span className="brand"></span>
               </div>
         <nav className="nav-center">
             <Link to="/group" className="nav-item">Group</Link>
