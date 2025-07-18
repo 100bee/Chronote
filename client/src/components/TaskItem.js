@@ -1,23 +1,59 @@
-// src/components/TaskItem.js
+import { useState } from 'react';
 
-const TaskItem = ({ todo, onStart, onComplete }) => {
-  if (!todo) return null;
+const TaskItem = ({ todo }) => {
+  const [isStarted, setIsStarted] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(null);
 
-  const { id, task, is_started, is_completed, duration } = todo;
+  const handleStart = () => {
+    setStartTime(Date.now());
+    setIsStarted(true);
+  };
+
+  const handleComplete = () => {
+    const endTime = Date.now();
+    const diff = Math.floor((endTime - startTime) / 1000);
+    setElapsedTime(diff);
+    setIsCompleted(true);
+  };
+
+  const formatTime = (seconds) => {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min}분 ${sec}초`;
+  };
+
+  const content = todo?.content || '작업 내용 없음';
+  const displayTime = elapsedTime ?? todo?.duration ?? 0;
 
   return (
-    <li className={`todo-item ${is_completed ? 'completed' : ''}`}>
+    <li className={`todo-item ${isCompleted ? 'completed' : ''}`}>
       <div className="task-content">
-        <span className="task-text">{task}</span>
-        {is_started && !is_completed && <span className="status"> (진행 중)</span>}
-        {is_completed && <span className="status"> (완료됨, ⏱ {duration}분)</span>}
+        <span className="task-text">{content}</span>
+        {isStarted && !isCompleted && (
+          <span className="status"> (진행 중)</span>
+        )}
+        {isCompleted && (
+          <span className="status">
+            (완료됨, ⏱ {formatTime(displayTime)})
+          </span>
+        )}
       </div>
       <div className="task-actions">
-        {!is_started && <button onClick={() => onStart(id)}>시작</button>}
-        {is_started && !is_completed && <button onClick={() => onComplete(id)}>완료</button>}
+        {!isStarted && !isCompleted && (
+          <button className="task-button start" onClick={handleStart}>
+            시작
+          </button>
+        )}
+        {isStarted && !isCompleted && (
+          <button className="task-button complete" onClick={handleComplete}>
+            완료
+          </button>
+        )}
       </div>
     </li>
   );
 };
 
-export default TaskItem; // ✅ 반드시 필요
+export default TaskItem;

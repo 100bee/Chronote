@@ -8,6 +8,7 @@ const AddTaskInput = ({ onAdd }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Adding task:', text);
     if (text.trim()) {
       onAdd(text);
       setText('');

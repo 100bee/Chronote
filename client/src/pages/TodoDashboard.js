@@ -47,10 +47,11 @@ const TodoDashboard = () => {
 
   // ✅ 할 일 추가 함수
   const handleAddTask = async (newTaskContent) => {
+    console.log('handleAddTask called with:', newTaskContent);
     try {
       const response = await axios.post('http://localhost:3001/api/todos', {
         user_id: userId,
-        content: newTaskContent,
+        task: newTaskContent,
       });
       setTodos([...todos, response.data]);
     } catch (error) {

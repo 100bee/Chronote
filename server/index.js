@@ -49,7 +49,7 @@ app.post('/api/todos', async (req, res) => {
         return res.status(400).json({ message: 'user_id와 task를 모두 제공해야 합니다.' });
     }
     try {
-        const [result] = await db.query('INSERT INTO todos (user_id, task) VALUES (?, ?)', [user_id, task]);
+        const [result] = await db.query('INSERT INTO todos (user_id, content) VALUES (?, ?)', [user_id, task]);
         const [newTodo] = await db.query('SELECT * FROM todos WHERE id = ?', [result.insertId]);
         res.status(201).json(newTodo[0]);
     } catch (err) {
