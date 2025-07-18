@@ -1,0 +1,30 @@
+.todo-header-box {
+  color: white;
+  padding: 30px;
+  background: linear-gradient(to right, #2e2e2e, #1e1e1e);
+
+  .todo-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .todo-date {
+    color: #aaa;
+    margin-bottom: 20px;
+  }
+
+  .focus-box {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    img {
+      width: 40px;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 14px;
+      color: #ccc;
+    }
+  }
+}
