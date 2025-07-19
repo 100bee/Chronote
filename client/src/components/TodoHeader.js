@@ -1,18 +1,38 @@
 // src/components/TodoHeader.js
+import { useEffect, useState } from 'react';
 import '../css/todoheader.scss';
+import QuoteBox from './QuoteBox'; // 랜덤 명언 컴포넌트
 
 const TodoHeader = ({ selected }) => {
-  const today = new Date().toLocaleDateString('ko-KR', {
-    year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
-  });
+  const [today, setToday] = useState(
+    new Date().toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long'
+    })
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      });
+      setToday(now);
+    }, 60000); // 1분마다 확인 (자정 넘어가면 자동 반영)
+
+    return () => clearInterval(interval); // 컴포넌트 언마운트 시 정리
+  }, []);
 
   return (
     <div className="todo-header-box">
       <h1 className="todo-title">{selected}</h1>
       <p className="todo-date">{today}</p>
       <div className="focus-box">
-        <p>오늘의 목표를 달성하세요.(미정)</p>
-        <p>오늘도 화이팅 입니다.(미정)</p>
+        <QuoteBox /> {/* 랜덤 명언 표시 */}
       </div>
     </div>
   );

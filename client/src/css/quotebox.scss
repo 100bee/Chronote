@@ -1,0 +1,18 @@
+/* src/css/quoteBox.scss */
+
+.quote-box {
+  font-size: 1.1rem;
+  color: #ddd;
+  text-align: center;
+  padding: 10px 0;
+  animation: fadein 1s ease;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

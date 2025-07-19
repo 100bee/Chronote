@@ -1,8 +1,6 @@
-// src/pages/TodoDashboard.js
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import AddTaskInput from '../components/AddTaskInput'; // ✅ 추가
-import Sidebar from '../components/Sidebar';
+import AddTaskInput from '../components/AddTaskInput';
 import TaskList from '../components/TaskList';
 import TodoHeader from '../components/TodoHeader';
 import '../css/addtaskinput.scss';
@@ -45,7 +43,6 @@ const TodoDashboard = () => {
     }
   };
 
-  // ✅ 할 일 추가 함수
   const handleAddTask = async (newTaskContent) => {
     console.log('handleAddTask called with:', newTaskContent);
     try {
@@ -60,13 +57,10 @@ const TodoDashboard = () => {
   };
 
   return (
-    <div className="dashboard">
-      <Sidebar selected={selectedList} setSelected={setSelectedList} />
-      <main className="main-area">
-        <TodoHeader selected={selectedList} />
-        <TaskList todos={todos} onToggle={handleToggle} onDelete={handleDelete} />
-        <AddTaskInput onAdd={handleAddTask} /> {/* ✅ 하단 입력창 */}
-      </main>
+    <div className="main-area">
+      <TodoHeader selected={selectedList} />
+      <TaskList todos={todos} onToggle={handleToggle} onDelete={handleDelete} />
+      <AddTaskInput onAdd={handleAddTask} />
     </div>
   );
 };
