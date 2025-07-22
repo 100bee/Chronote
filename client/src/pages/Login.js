@@ -5,10 +5,12 @@
 // 로그인 성공 시 알림 메시지가 표시됩니다.
 import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ← 추가!
 import '../css/login.scss';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
+  const navigate = useNavigate(); // ← 추가!
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,6 +21,7 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:3001/login', form);
       alert('로그인 성공!');
+      navigate('/todos'); // ← 로그인 성공 시 '/todos'로 이동
     } catch (error) {
       alert('로그인 실패');
     }

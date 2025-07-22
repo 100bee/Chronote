@@ -160,3 +160,25 @@ app.get('/api/study-logs', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`서버 실행됨: http://localhost:${PORT}`);
 });
+// ✅ 로그인
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const [users] = await db.query(
+      'SELECT * FROM users WHERE email = ? AND password = ?',
+      [email, password]
+    );
+    if (users.length === 0) {
+      return res.status(401).json({ message: '로그인 실패: 이메일 또는 비밀번호가 올바르지 않습니다.' });
+    }
+    // 로그인 성공 시 사용자 정보 전달(보안상 비밀번호 제외!)
+    const { password: _, ...userWithoutPassword } = users[0];
+    res.status(200).json({
+      message: '로그인 성공',
+      user: userWithoutPassword
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: '서버 오류' });
+  }
+});
