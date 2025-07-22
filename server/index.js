@@ -84,7 +84,7 @@ app.patch('/api/todos/:id/start', async (req, res) => {
   }
 });
 
-// ✅ 완료 시간 기록 및 duration 계산
+// ✅ 완료 시간 기록 및 duration 계산 (여기 수정!)
 app.patch('/api/todos/:id/complete', async (req, res) => {
   const { id } = req.params;
   const now = new Date();
@@ -95,8 +95,9 @@ app.patch('/api/todos/:id/complete', async (req, res) => {
     }
     const start = new Date(rows[0].start_time);
     const duration = Math.floor((now - start) / 1000);
-    await db.query('UPDATE todos SET end_time = ?, duration = ? WHERE id = ?', [now, duration, id]);
-    res.status(200).json({ message: '완료 시간과 소요 시간 저장 완료' });
+    // ✅ is_completed도 1로 설정!
+    await db.query('UPDATE todos SET end_time = ?, duration = ?, is_completed = 1 WHERE id = ?', [now, duration, id]);
+    res.status(200).json({ message: '완료 시간과 소요 시간 저장 및 완료 처리 완료' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: '서버 오류' });

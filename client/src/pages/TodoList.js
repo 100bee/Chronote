@@ -1,7 +1,12 @@
+// src/pages/TodoList.js
+// 투두 리스트 페이지
+// 이 페이지는 사용자가 자신의 투두 리스트를 관리할 수 있는 기능을 제공합니다.
+// 사용자는 투두를 추가하고, 완료 상태를 토글하며, 삭제할 수 있습니다.
+// 투두 리스트는 API를 통해 불러오며, 각 투두 항목은 개별적으로 관리됩니다.
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import '../css/TodoList.scss';
 import TaskList from '../components/TaskList';
+import '../css/TodoList.scss';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
