@@ -1,3 +1,7 @@
+// src/pages/FirstPage.js
+// 첫 페이지
+// 이 페이지는 사용자가 Chronote에 처음 접속했을 때 보여지는 첫 화면입니다.
+// 사용자는 로그인 또는 회원가입을 선택할 수 있습니다.
 import { useNavigate } from 'react-router-dom';
 import '../css/firstpage.scss';
 

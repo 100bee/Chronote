@@ -1,3 +1,7 @@
+// src/pages/TodoDashboard.js
+// 투두 관리의 메인 페이지
+// 이 페이지는 투두 리스트를 보여주고, 새로운 투두를 추가할 수 있는 기능을 포함합니다.
+// 투두 리스트는 API를 통해 불러오며, 각 투두 항목은 개별적으로 완료 상태를 토글하거나 삭제할 수 있습니다.
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import AddTaskInput from '../components/AddTaskInput';

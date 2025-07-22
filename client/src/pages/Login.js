@@ -1,4 +1,8 @@
 // src/pages/Login.js
+// 로그인 페이지
+// 이 페이지는 사용자가 로그인할 수 있는 기능을 제공합니다.
+// 사용자는 이메일과 비밀번호를 입력하여 로그인할 수 있으며,
+// 로그인 성공 시 알림 메시지가 표시됩니다.
 import axios from 'axios';
 import { useState } from 'react';
 import '../css/login.scss';

@@ -1,3 +1,8 @@
+// src/pages/TodoCalendar.js
+// 날짜별 할 일 관리 페이지
+// 이 페이지는 사용자가 날짜별로 할 일을 관리할 수 있는 기능을 제공합니다.
+// 사용자는 특정 날짜를 선택하고, 해당 날짜에 할 일을 추가하거나 확인할 수 있습니다.
+// 할 일은 API를 통해 불러오며, 각 날짜별로 할 일을 추가하고 관리할 수 있습니다.
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
