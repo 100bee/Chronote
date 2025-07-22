@@ -1,11 +1,14 @@
-// src/components/TaskList.js
 import TaskItem from './TaskItem';
 
-const TaskList = ({ todos }) => {
+const TaskList = ({ todos, refreshTodos }) => {
   return (
     <ul className="todo-list">
-      {todos.map((todo) => (
-        <TaskItem key={todo.id} todo={todo} />
+      {todos.map(todo => (
+        <TaskItem
+          key={todo.id}
+          todo={todo}
+          refreshTodos={refreshTodos}
+        />
       ))}
     </ul>
   );

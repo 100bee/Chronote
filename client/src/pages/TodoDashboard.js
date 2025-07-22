@@ -44,11 +44,11 @@ const TodoDashboard = () => {
   };
 
   const handleAddTask = async (newTaskContent) => {
-    console.log('handleAddTask called with:', newTaskContent);
     try {
       const response = await axios.post('http://localhost:3001/api/todos', {
         user_id: userId,
         task: newTaskContent,
+        date: new Date().toISOString().split('T')[0],
       });
       setTodos([...todos, response.data]);
     } catch (error) {
@@ -56,10 +56,23 @@ const TodoDashboard = () => {
     }
   };
 
+  // ⬇️ "시작"/"완료"시 리스트를 다시 불러오고 싶다면 아래 함수를 내려주세요
+  const refreshTodos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/api/todos?user_id=${userId}`);
+      setTodos(response.data);
+    } catch (error) {
+      console.error('Error fetching todos:', error);
+    }
+  };
+
   return (
     <div className="main-area">
       <TodoHeader selected={selectedList} />
-      <TaskList todos={todos} onToggle={handleToggle} onDelete={handleDelete} />
+      <TaskList
+        todos={todos}
+        refreshTodos={refreshTodos}
+      />
       <AddTaskInput onAdd={handleAddTask} />
     </div>
   );
