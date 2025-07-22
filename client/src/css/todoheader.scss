@@ -1,29 +1,63 @@
 .todo-header-box {
-  color: white;
-  padding: 30px;
-  background: linear-gradient(to right, #2e2e2e, #1e1e1e);
+  color: #222;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  margin: 0 auto 30px auto;
 
   .todo-title {
-    font-size: 32px;
-    margin-bottom: 10px;
+    font-size: 28px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #111;
   }
 
   .todo-date {
-    color: #aaa;
-    margin-bottom: 20px;
+    color: #777;
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+
+  .focus-box {
+    background: #f4f4f4;
+    padding: 18px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+
+    img {
+      width: 36px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 15px;
+      color: #333;
+      margin: 0;
+    }
+  }
+}
+
+// 💡 다크모드 스타일 오버라이드
+.darkmode .todo-header-box {
+  background: linear-gradient(to right, #2e2e2e, #1e1e1e);
+  color: white;
+
+  .todo-title {
+    color: white;
+  }
+
+  .todo-date {
+    color: #ccc;
   }
 
   .focus-box {
     background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    img {
-      width: 40px;
-      margin-bottom: 10px;
-    }
+    border: 1px solid #444;
+
     p {
-      font-size: 14px;
       color: #ccc;
     }
   }

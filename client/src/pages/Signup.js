@@ -5,10 +5,10 @@
 // 입력된 정보는 API를 통해 서버로 전송되며, 회원가입이 완료되면 알림 메시지가 표시됩니다.
 // 회원가입 폼은 기본적인 유효성 검사를 포함하고 있습니다.
 // 사용자가 비밀번호와 비밀번호 확인이 일치하지 않을 경우 알림 메시지를 표시합니다.
-import { useState } from 'react';
-import '../css/signup.scss';
+import { useState } from 'react'; // React의 useState 훅을 사용하여 상태를 관리합니다.
+import '../css/signup.scss'; // 회원가입 페이지의 스타일을 적용하기 위한 CSS 파일을 import 합니다.
 
-function Signup() {
+function Signup() {// Signup 컴포넌트 정의
   const [form, setForm] = useState({
     email: '',
     password: '',
