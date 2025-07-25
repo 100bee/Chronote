@@ -7,8 +7,6 @@
 
   .login-box {
     width: 400px;
-
-
     padding: 40px;
     border: 1px solid #e5e5e5;
     border-radius: 8px;
@@ -19,7 +17,7 @@
 
     .logo {
       font-size: 32px;
-      color: #4c84ff;
+      color: #ff8c00;
       margin-bottom: 20px;
       font-weight: bold;
     }
@@ -37,7 +35,7 @@
         transition: border 0.3s;
 
         &:focus {
-          border: 1px solid #4c84ff;
+          border: 1px solid #ff8c00;
           outline: none;
         }
       }
@@ -50,7 +48,7 @@
 
         .ip-secure {
           .toggle {
-            background-color: #4c84ff;
+            background-color: #ff8c00;
             color: #fff;
             border-radius: 12px;
             padding: 2px 8px;
@@ -62,7 +60,7 @@
 
       .login-btn {
         padding: 12px;
-        background-color: #4c84ff;
+        background-color: #ff8c00;
         color: white;
         font-weight: bold;
         border: none;
@@ -71,15 +69,15 @@
         cursor: pointer;
 
         &:hover {
-          background-color: #3a6fdb;
+          background-color: #e67a00;
         }
       }
 
       .passkey-btn {
         padding: 12px;
         background-color: white;
-        color: #4c84ff;
-        border: 1px solid #4c84ff;
+        color: #ff8c00;
+        border: 1px solid #ff8c00;
         border-radius: 4px;
         font-size: 15px;
         font-weight: bold;
@@ -87,7 +85,7 @@
         cursor: pointer;
 
         &:hover {
-          background-color: #f9fff9;
+          background-color: #fff7f0;
         }
       }
     }
@@ -105,6 +103,58 @@
         &:hover {
           text-decoration: underline;
         }
+      }
+    }
+  }
+}
+
+/* ✅ 다크모드 대응 스타일 */
+.darkmode .login-wrapper {
+  background-color: #121212;
+
+  .login-box {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    color: #f0f0f0;
+
+    .logo {
+      color: #ff8c00;
+    }
+
+    input {
+      background-color: #2a2a2a;
+      color: #f0f0f0;
+      border: 1px solid #555;
+
+      &:focus {
+        border: 1px solid #ff8c00;
+      }
+    }
+
+    .login-btn {
+      background-color: #ff8c00;
+      color: white;
+
+      &:hover {
+        background-color: #e67a00;
+      }
+    }
+
+    .passkey-btn {
+      background-color: #2a2a2a;
+      color: #ff8c00;
+      border: 1px solid #ff8c00;
+
+      &:hover {
+        background-color: #3a3a3a;
+      }
+    }
+
+    .links a {
+      color: #bbb;
+
+      &:hover {
+        color: #fff;
       }
     }
   }

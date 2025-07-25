@@ -1,12 +1,13 @@
+// client/src/pages/Main.js
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../css/main.scss"; // 스타일 반영
 
-const userId = 1; // 실제 로그인 유저라면 교체
+const userId = 1;
 
-function Main() {
+function Main({ mode }) {
   const todayKey = new Date().toISOString().split('T')[0];
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [todos, setTodos] = useState([]);
@@ -35,7 +36,7 @@ function Main() {
   };
 
   return (
-    <div className="main-root">
+    <div className={`main-root ${mode === 'dark' ? 'darkmode' : 'lightmode'}`}>
       <div className="main-center-wrap">
         {/* 캘린더 */}
         <div className="main-calendar-box">

@@ -1,3 +1,4 @@
+// client/src/pages/TodoCalendar.js
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
@@ -5,7 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import '../css/todoCalendar.scss';
 import { formatDateKorean } from '../utils/dateUtils';
 
-const TodoCalendar = () => {
+const TodoCalendar = ({ mode }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
@@ -44,7 +45,7 @@ const TodoCalendar = () => {
   };
 
   return (
-    <div className="calendar-page">
+    <div className={`calendar-page ${mode === 'dark' ? 'darkmode' : 'lightmode'}`}>
       <div className="calendar-left">
         <h2>날짜별 할 일</h2>
         <div className="calendar-container">

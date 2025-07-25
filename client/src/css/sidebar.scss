@@ -9,6 +9,7 @@
 .sidebar-title {
   font-size: 24px;
   margin-bottom: 30px;
+  color: #ff8c00; // 주황색 강조
 }
 
 .menu-list {
@@ -29,7 +30,7 @@
     }
 
     &.active {
-      background-color: #3f51b5; // 💡 파란색 강조
+      background-color: #ff8c00; // 주황색 강조
       color: white;
       font-weight: bold;
     }

@@ -3,7 +3,7 @@
 .main-root {
   width: 100vw;
   min-height: 85vh;
-  background: #fff; // 💡 기본은 흰색 (부모 .darkmode에서 오버라이드)
+  background: #fff; // 기본은 흰색 (부모 .darkmode에서 오버라이드)
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,14 +12,14 @@
 .main-center-wrap {
   display: flex;
   flex-direction: row;
-  gap: 0; // 간격은 divider로 분리
+  gap: 0;
   align-items: flex-start;
   width: 960px;
   max-width: 98vw;
   justify-content: center;
 }
 
-/* 기본 박스 스타일 */
+/* 공통 박스 스타일 */
 .main-calendar-box,
 .main-today-box {
   background: #fff;
@@ -35,7 +35,7 @@
   color: #232323;
 }
 
-/* ⭐️ 다크/라이트 모드별 스타일 오버라이드 */
+/* 다크/라이트 모드별 오버라이드 */
 .lightmode .main-calendar-box,
 .lightmode .main-today-box {
   background: #fff !important;
@@ -50,8 +50,7 @@
   box-shadow: 0 4px 32px 0 rgba(0,0,0,0.22);
 }
 
-/* 나머지 공통 스타일 그대로! */
-
+/* 주황색 구분선 */
 .main-divider {
   width: 2.5px;
   background: #ff8c00;
@@ -61,8 +60,9 @@
   align-self: stretch;
 }
 
+/* 제목 색 주황 */
 .main-today-title {
-  color: #4c84ff;
+  color: #ff8c00;
   font-size: 1.5rem;
   font-weight: 800;
   margin-bottom: 18px;
@@ -86,8 +86,9 @@
   color: inherit;
 }
 
+/* 버튼 색상 변경 */
 .main-today-btn {
-  background: #4c84ff;
+  background: #ff8c00;
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -96,7 +97,7 @@
   cursor: pointer;
 
   &:hover {
-    background: #3c6ed6;
+    background: #e67a00;
   }
 }
 
@@ -106,10 +107,11 @@
   margin: 0;
 }
 
+/* 할 일 없을 때 주황 강조 */
 .main-today-empty {
-  color: #5a7cff;
+  color: #ff8c00;
   font-size: 1rem;
-  background: #e4eaff;
+  background: #fff1e0;
   padding: 3px 9px;
   border-radius: 6px;
   margin-bottom: 6px;

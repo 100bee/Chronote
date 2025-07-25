@@ -19,7 +19,7 @@
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 30px;
-  color: #4d7cff;
+  color: #ff8c00;
 }
 
 .signup-form input,
@@ -31,6 +31,11 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
+
+  &:focus {
+    border: 1px solid #ff8c00;
+    outline: none;
+  }
 }
 
 .selector {
@@ -40,7 +45,7 @@
 
 .submit-btn {
   width: 100%;
-  background-color: #007bff;
+  background-color: #ff8c00;
   color: white;
   padding: 14px;
   border: none;
@@ -48,8 +53,42 @@
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+
+  &:hover {
+    background-color: #e67a00;
+  }
 }
 
-.submit-btn:hover {
-  background-color: #0056b3;
+/* ✅ 다크모드 대응 스타일 */
+.darkmode .signup-wrapper {
+  background-color: #121212;
+
+  .signup-box {
+    background-color: #1e1e1e;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+
+  .logo {
+    color: #ff8c00;
+  }
+
+  .signup-form input,
+  .signup-form select {
+    background-color: #2a2a2a;
+    color: #f0f0f0;
+    border: 1px solid #444;
+
+    &:focus {
+      border: 1px solid #ff8c00;
+    }
+  }
+
+  .submit-btn {
+    background-color: #ff8c00;
+    color: white;
+
+    &:hover {
+      background-color: #e67a00;
+    }
+  }
 }

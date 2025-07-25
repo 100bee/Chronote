@@ -1,8 +1,10 @@
 // client/src/App.js
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+
 import Header from './components/Header';
 import Layout from './components/Layout';
+
 import Analysis from './pages/Analysis';
 import FirstPage from './pages/FirstPage';
 import Group from './pages/Group';
@@ -15,18 +17,23 @@ import TodoDashboard from './pages/TodoDashboard';
 
 function App() {
   const [tasksByDate, setTasksByDate] = useState({});
-  const [mode, setMode] = useState('light'); // ⭐️ 다크/라이트 상태
+  const [mode, setMode] = useState('light'); // 다크/라이트 상태 관리
 
-  const toggleMode = () => setMode(mode === 'light' ? 'dark' : 'light');
+  const toggleMode = () => setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
+
+  // ✅ 다크모드 클래스 body에 적용
+  useEffect(() => {
+    document.body.className = mode === 'dark' ? 'darkmode' : 'lightmode';
+  }, [mode]);
 
   return (
-    <div className={mode === 'dark' ? 'darkmode' : 'lightmode'}>
+    <>
       <Header mode={mode} toggleMode={toggleMode} />
       <Routes>
         <Route path="/" element={<FirstPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/main" element={<Main />} />
+        <Route path="/main" element={<Main mode={mode} />} />
         <Route path="/group" element={<Group />} />
         <Route path="/rank" element={<Rank />} />
         <Route element={<Layout />}>
@@ -36,6 +43,7 @@ function App() {
               <TodoDashboard
                 tasksByDate={tasksByDate}
                 setTasksByDate={setTasksByDate}
+                mode={mode}
               />
             }
           />
@@ -45,6 +53,7 @@ function App() {
               <TodoCalendar
                 tasksByDate={tasksByDate}
                 setTasksByDate={setTasksByDate}
+                mode={mode}
               />
             }
           />
@@ -53,12 +62,13 @@ function App() {
             element={
               <Analysis
                 tasksByDate={tasksByDate}
+                mode={mode}
               />
             }
           />
         </Route>
       </Routes>
-    </div>
+    </>
   );
 }
 

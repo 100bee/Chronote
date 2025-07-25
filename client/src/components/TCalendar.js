@@ -1,9 +1,10 @@
+// client/src/pages/TCalendar.js
 import { useState } from 'react';
 import CalendarLib from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../css/TCalendar.scss';
 
-function TCalendar() {
+function TCalendar({ mode }) {
   const [value, setValue] = useState(new Date());
   const [todos, setTodos] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -26,18 +27,21 @@ function TCalendar() {
   };
 
   return (
-    <div className="calendar-page">
+    <div className={`calendar-page ${mode === 'dark' ? 'darkmode' : ''}`}>
       <div className="calendar-left">
-        <CalendarLib
-          onClickDay={handleDateClick}
-          value={value}
-          formatDay={(locale, date) => (
-            <span className="tile-number">{date.getDate()}</span>
-          )}
-          tileClassName={({ date }) =>
-            todos[date.toDateString()] ? 'has-todo' : null
-          }
-        />
+        {/* ✅ Calendar를 div로 감싸고 custom-calendar 클래스 부여 */}
+        <div className="custom-calendar">
+          <CalendarLib
+            onClickDay={handleDateClick}
+            value={value}
+            formatDay={(locale, date) => (
+              <span className="tile-number">{date.getDate()}</span>
+            )}
+            tileClassName={({ date }) =>
+              todos[date.toDateString()] ? 'has-todo' : null
+            }
+          />
+        </div>
 
         {showModal && (
           <div className="modal">
