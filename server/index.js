@@ -1,4 +1,6 @@
 // ✅ server/index.js
+require('dotenv').config();// Import dotenv to use environment variables
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');

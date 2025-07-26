@@ -1,8 +1,16 @@
-// client/src/components/Header.js
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/header.scss';
 
 function Header({ mode, toggleMode }) {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token'); // ✅ 로그인 여부 판단
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    alert('로그아웃 되었습니다.');
+    navigate('/login');
+  };
+
   return (
     <header className="header">
       <div className="nav-group">
@@ -24,8 +32,17 @@ function Header({ mode, toggleMode }) {
         <button className="mode-toggle-btn" onClick={toggleMode}>
           {mode === "dark" ? "☀️ Light" : "🌙 Dark"}
         </button>
-        <Link to="/login" className="nav-item">Sign In</Link>
-        <Link to="/signup" className="nav-item get-started">Get Started</Link>
+
+        {token ? (
+          <>
+            <button onClick={handleLogout} className="nav-item logout-btn">Logout</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="nav-item">Sign In</Link>
+            <Link to="/signup" className="nav-item get-started">Get Started</Link>
+          </>
+        )}
       </div>
     </header>
   );
