@@ -3,10 +3,15 @@
 .main-root {
   width: 100vw;
   min-height: 85vh;
-  background: #fff; // 기본은 흰색 (부모 .darkmode에서 오버라이드)
+  background: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* ✅ 다크모드 배경 보정 */
+.darkmode .main-root {
+  background: #1a1a1f; // 완전 블랙보다 부드러운 어두운 톤
 }
 
 .main-center-wrap {
@@ -24,7 +29,7 @@
 .main-today-box {
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.08);
   padding: 36px 32px 32px 32px;
   min-width: 400px;
   max-width: 480px;
@@ -35,19 +40,20 @@
   color: #232323;
 }
 
-/* 다크/라이트 모드별 오버라이드 */
+/* ✅ 다크/라이트 모드별 박스 스타일 */
 .lightmode .main-calendar-box,
 .lightmode .main-today-box {
   background: #fff !important;
   color: #232323 !important;
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.08);
 }
 
 .darkmode .main-calendar-box,
 .darkmode .main-today-box {
-  background: #232323 !important;
-  color: #eee !important;
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.22);
+  background: #26262c !important;         // ✔️ 배경보다 살짝 밝게
+  color: #dddddd !important;              // ✔️ 부드러운 흰색
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); // ✔️ 더 진한 그림자
+  border: 1px solid rgba(255, 255, 255, 0.05); // ✔️ 박스 윤곽 강조
 }
 
 /* 주황색 구분선 */
@@ -60,7 +66,7 @@
   align-self: stretch;
 }
 
-/* 제목 색 주황 */
+/* 제목 */
 .main-today-title {
   color: #ff8c00;
   font-size: 1.5rem;
@@ -69,6 +75,7 @@
   letter-spacing: -1px;
 }
 
+/* 입력 영역 */
 .main-today-input-wrap {
   display: flex;
   gap: 10px;
@@ -86,7 +93,14 @@
   color: inherit;
 }
 
-/* 버튼 색상 변경 */
+/* ✅ 다크모드 입력창 */
+.darkmode .main-today-input {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  color: #f0f0f0;
+}
+
+/* 버튼 */
 .main-today-btn {
   background: #ff8c00;
   color: #fff;
@@ -101,13 +115,23 @@
   }
 }
 
+/* ✅ 다크모드 버튼 강조 유지 */
+.darkmode .main-today-btn {
+  background: #f28500;
+  color: white;
+
+  &:hover {
+    background: darken(#f28500, 8%);
+  }
+}
+
 .main-today-list {
   list-style: none;
   padding-left: 2px;
   margin: 0;
 }
 
-/* 할 일 없을 때 주황 강조 */
+/* 할 일 없을 때 */
 .main-today-empty {
   color: #ff8c00;
   font-size: 1rem;
@@ -115,6 +139,12 @@
   padding: 3px 9px;
   border-radius: 6px;
   margin-bottom: 6px;
+}
+
+/* ✅ 다크모드 빈 목록 메시지 */
+.darkmode .main-today-empty {
+  background: #3a2f20;
+  color: #ffb347;
 }
 
 .main-today-completed {
