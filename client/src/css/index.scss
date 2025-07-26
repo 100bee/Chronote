@@ -1,7 +1,16 @@
-// client/src/css/index.scss
 @import "./_utils.scss";
 
-/* 기본 라이트/다크 모드 배경, 글자색 설정 */
+/* 기본 배경 및 폰트 설정 */
+body, html, #root {
+  font-family: $font-family;
+  background-color: $bg-color;
+  margin: 0;
+  padding: 0;
+  color: $text-color;
+  // ✅ display 속성 제거!
+}
+
+/* 라이트 모드 스타일 */
 .lightmode {
   background-color: #f5f5f5;
   color: #222;
@@ -12,6 +21,7 @@
   }
 }
 
+/* 다크 모드 스타일 */
 .darkmode {
   background-color: #181818;
   color: #eee;
@@ -20,23 +30,16 @@
     background-color: #181818 !important;
     color: #eee !important;
   }
-
-  // 추가로 버튼, 입력창 등 세부 다크모드 스타일 필요시 여기에
 }
 
-body {
-  font-family: $font-family;
-  margin: 0;
-  padding: 0;
-  color: $text-color;
-}
-
+/* 컨테이너 레이아웃 */
 .container {
   @include flex-center;
   flex-direction: column;
   height: 100vh;
 }
 
+/* 제목 및 부제목 */
 .title {
   font-size: $font-lg;
   color: $main-color;
@@ -48,6 +51,7 @@ body {
   margin-bottom: 20px;
 }
 
+/* 버튼 그룹 */
 .button-group {
   display: flex;
   gap: 10px;
@@ -57,7 +61,7 @@ body {
   }
 }
 
-/* 다크/라이트 토글 버튼 스타일 */
+/* 다크/라이트 모드 토글 버튼 */
 .mode-toggle-btn {
   background: none;
   border: 1.2px solid #bbb;
@@ -69,15 +73,18 @@ body {
   cursor: pointer;
   transition: background 0.17s, color 0.14s;
 }
+
 .mode-toggle-btn:hover {
   background: #ededed;
   color: #444;
 }
+
 .darkmode .mode-toggle-btn {
   background: none;
   border: 1.2px solid #444;
   color: #bbb;
 }
+
 .darkmode .mode-toggle-btn:hover {
   background: #222;
   color: #fff;
