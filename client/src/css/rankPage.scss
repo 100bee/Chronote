@@ -38,11 +38,11 @@
   background-color: #26262c;
   color: #e8e8e8;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  border-left-color: #ffb347; // 다크모드에 어울리는 라이트 오렌지/블루
+  border-left-color: #ffb347; // 다크모드용 오렌지
 }
 
 .darkmode .rank-right-box {
-  border-left-color: #6ec5ff;
+  border-left-color: #6ec5ff; // 다크모드용 블루
 }
 
 h2 {
@@ -88,4 +88,45 @@ hr {
 .ranking-list {
   list-style-position: inside;
   padding-left: 0;
+}
+
+/* -------------------------- */
+/* 🏅 랭크별 닉네임 스타일 */
+/* -------------------------- */
+
+.nickname {
+  font-weight: bold;
+  font-size: 18px;
+  -webkit-text-stroke: 0.6px black;
+}
+
+/* ✅ 랭크별 색상 및 외곽선 */
+.bronze {
+  color: #cd7f32;
+  -webkit-text-stroke: 0.6px #6e4f27;
+}
+
+.silver {
+  color: #c0c0c0;
+  -webkit-text-stroke: 0.6px #808080;
+}
+
+.gold {
+  color: #ffd700;
+  -webkit-text-stroke: 0.6px #b8860b;
+}
+
+.platinum {
+  color: #00bfff;
+  -webkit-text-stroke: 0.6px #1e90ff;
+}
+
+.diamond {
+  color: #00ffff;
+  -webkit-text-stroke: 0.6px #008b8b;
+}
+
+/* ✅ 다크모드용 외곽선 대비 */
+.darkmode .nickname {
+  -webkit-text-stroke: 0.6px white;
 }
