@@ -45,3 +45,9 @@ ADD COLUMN duration INT;  -- 단위: 초
 ALTER TABLE todos
 ADD COLUMN start_time TIME NULL,
 ADD COLUMN end_time TIME NULL;
+
+ALTER TABLE todos
+MODIFY COLUMN start_time DATETIME NULL;
+
+ALTER TABLE todos
+MODIFY COLUMN end_time DATETIME NULL;

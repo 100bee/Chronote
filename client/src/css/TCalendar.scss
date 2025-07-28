@@ -1,0 +1,194 @@
+// 기본 캘린더 스타일
+.react-calendar {
+  width: 700px;
+  height: 500px;
+  max-width: 90vw;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+// 내비게이션
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  button {
+    background: none;
+    border: none;
+    color: #ff8c00; // 주황색 강조
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+// 요일 표시
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 0.5rem;
+}
+
+// 날짜 타일
+.react-calendar__tile {
+  padding: 0.6rem;
+  height: 100%;
+  text-align: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+  position: relative;
+  background: none !important;
+  color: #222 !important;
+
+  &:hover {
+    background: #fff1e0 !important;
+    cursor: pointer;
+  }
+}
+
+.react-calendar__tile:hover:not(.has-todo) {
+  background-color: #fff1e0 !important;
+  cursor: pointer;
+}
+
+.react-calendar__tile.has-todo {
+  background-color: #ffe0b2 !important;
+  font-weight: bold;
+}
+
+.react-calendar__tile.has-todo:hover {
+  background-color: #ffd699 !important;
+  cursor: default;
+}
+
+.react-calendar__tile--now {
+  background-color: #ffddaa !important;
+  font-weight: bold;
+}
+
+.react-calendar__tile--active {
+  background-color: #ff8c00 !important;
+  color: white !important;
+}
+
+// 날짜 숫자 스타일
+.tile-number {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+// 모달
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  min-width: 600px;
+}
+
+// 텍스트에어리어
+textarea {
+  width: 90%;
+  height: 200px;
+  padding: 10px;
+  border: 1px solid #888;
+  border-radius: 6px;
+  resize: none;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+// 버튼
+button {
+  padding: 6px 14px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ff8c00;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #e67a00;
+  }
+}
+
+// ✅ 다크모드 스타일 오버라이드
+.darkmode .react-calendar {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+
+.darkmode .react-calendar__navigation button {
+  color: #ffb74d;
+}
+
+.darkmode .react-calendar__month-view__weekdays {
+  color: #cccccc;
+}
+
+.darkmode .react-calendar__tile {
+  background-color: transparent !important;
+  color: #eeeeee !important;
+
+  &:hover {
+    background-color: #3a3a3a !important;
+  }
+}
+
+.darkmode .react-calendar__tile--now {
+  background-color: #555 !important;
+  color: #fff !important;
+}
+
+.darkmode .react-calendar__tile--active {
+  background-color: #ff8c00 !important;
+  color: white !important;
+}
+
+.darkmode .tile-number {
+  color: #eeeeee !important;
+}
+
+.darkmode .modal-content {
+  background-color: #2e2e2e;
+  color: #f0f0f0;
+}
+
+.darkmode textarea {
+  background-color: #1f1f1f;
+  color: #eee;
+  border: 1px solid #666;
+}
+
+.darkmode button {
+  background-color: #ff8c00;
+  color: white;
+
+  &:hover {
+    background-color: #e67a00;
+  }
+}
