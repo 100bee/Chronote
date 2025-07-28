@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 // ✅ 기본 모듈
+=======
+// ✅ server/index.js
+require('dotenv').config();// Import dotenv to use environment variables
+
+>>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
 const express = require('express');
 const http = require('http');
 const cors = require('cors');

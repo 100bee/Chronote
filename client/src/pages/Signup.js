@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // src/pages/Signup.js
 // 회원가입 페이지
 // 이 페이지는 사용자가 회원가입을 할 수 있는 기능을 제공합니다.
@@ -9,11 +10,21 @@ import { useState } from 'react'; // React의 useState 훅을 사용하여 상�
 import '../css/signup.scss'; // 회원가입 페이지의 스타일을 적용하기 위한 CSS 파일을 import 합니다.
 
 function Signup() {// Signup 컴포넌트 정의
+=======
+import axios from 'axios';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../css/signup.scss';
+
+function Signup() {
+  const navigate = useNavigate();
+
+>>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
   const [form, setForm] = useState({
     email: '',
     password: '',
     confirmPassword: '',
-    name: '',
+    name: '',           // nickname으로 전송
     birth: '',
     gender: '',
     nationality: '',
@@ -24,14 +35,42 @@ function Signup() {// Signup 컴포넌트 정의
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (form.password !== form.confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
-    alert("가입 완료!");
-    // TODO: 가입 처리 로직 (ex. axios.post 등)
+
+    try {
+      // ✅ 1. 회원가입 요청
+      await axios.post('http://localhost:3001/signup', {
+        email: form.email,
+        password: form.password,
+        nickname: form.name // name → nickname으로 전송
+      });
+
+      // ✅ 2. 자동 로그인
+      const loginRes = await axios.post('http://localhost:3001/login', {
+        email: form.email,
+        password: form.password
+      });
+
+      // ✅ 3. JWT 토큰 저장
+      const token = loginRes.data.token;
+      localStorage.setItem('token', token);
+
+      alert("회원가입 및 로그인 완료!");
+      navigate('/todos');
+    } catch (err) {
+      if (err.response?.status === 400) {
+        alert(err.response.data.message);
+      } else {
+        alert("회원가입 실패. 서버 오류가 발생했습니다.");
+        console.error(err);
+      }
+    }
   };
 
   return (
@@ -42,7 +81,7 @@ function Signup() {// Signup 컴포넌트 정의
           <input name="email" placeholder="아이디 또는 이메일" onChange={handleChange} />
           <input name="password" type="password" placeholder="비밀번호" onChange={handleChange} />
           <input name="confirmPassword" type="password" placeholder="비밀번호 확인" onChange={handleChange} />
-          <input name="name" placeholder="이름" onChange={handleChange} />
+          <input name="name" placeholder="닉네임" onChange={handleChange} />
           <input name="birth" placeholder="생년월일 8자리 (예: 19990101)" onChange={handleChange} />
 
           <div className="selector">

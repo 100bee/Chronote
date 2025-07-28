@@ -1,33 +1,37 @@
-
-# 테스트할때 이거 그대로 실행하면 됩니다.
+-- ✅ 1. 데이터베이스 선택 (미리 생성되어 있다고 가정)
 USE chronote;
 
+-- ✅ 2. users 테이블 생성
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  nickname VARCHAR(255) NOT NULL DEFAULT '익명',
+  name VARCHAR(100) DEFAULT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ✅ 3. todos 테이블 생성
 CREATE TABLE IF NOT EXISTS todos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   content VARCHAR(255) NOT NULL,
   is_started BOOLEAN DEFAULT FALSE,
   is_completed BOOLEAN DEFAULT FALSE,
-  start_time DATETIME,
-  end_time DATETIME,
-  duration INT
+  start_time DATETIME DEFAULT NULL,
+  end_time DATETIME DEFAULT NULL,
+  duration INT DEFAULT NULL,      -- 단위: 초
+  date DATE DEFAULT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- MySQL에 접속해서 실행
-SELECT user, host FROM mysql.user;
-
--- chronote_user 계정 생성 (비밀번호: 1234)
-CREATE USER 'chronote_user'@'localhost' IDENTIFIED BY '1234';
-
--- chronote 데이터베이스에 대한 모든 권한 부여
-GRANT ALL PRIVILEGES ON chronote.* TO 'chronote_user'@'localhost';
-
--- 권한 적용
-FLUSH PRIVILEGES;
-
+-- ✅ 4. 외래 키 연결 (사용자 삭제 시 할 일도 삭제됨)
 ALTER TABLE todos
-ADD created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+  ADD CONSTRAINT fk_user_id
+  FOREIGN KEY (user_id) REFERENCES users(id)
+  ON DELETE CASCADE;
 
+<<<<<<< HEAD
 ALTER TABLE todos
 ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
 
@@ -51,3 +55,5 @@ MODIFY COLUMN start_time DATETIME NULL;
 
 ALTER TABLE todos
 MODIFY COLUMN end_time DATETIME NULL;
+=======
+>>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6

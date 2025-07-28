@@ -21,8 +21,17 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3001/login', form);
+
+      // ✅ JWT 토큰 저장
+      const token = response.data.token;
+      localStorage.setItem('token', token); // 또는 sessionStorage.setItem('token', token);
+
       alert('로그인 성공!');
+<<<<<<< HEAD
       navigate('/todos'); // ← 로그인 성공 시 할 일 페이지로 이동
+=======
+      navigate('/todos'); // 로그인 성공 시 할 일 페이지로 이동
+>>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
     } catch (error) {
       alert('로그인 실패');
     }
@@ -61,7 +70,11 @@ function Login() {
         <div className="links">
           <a href="#">비밀번호 찾기</a>
           <a href="#">아이디 찾기</a>
+<<<<<<< HEAD
           <a href="/signup">회원가입</a> {/* ← 정확한 경로 적용 */}
+=======
+          <a href="/signup">회원가입</a>
+>>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
         </div>
       </div>
     </div>
