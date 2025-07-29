@@ -57,19 +57,24 @@ const TodoDashboard = () => {
     }
   };
 
-  // ✅ 새로운 작업 추가
+  // ✅ 새로운 작업 추가 (DATETIME 형식으로 변경)
   const handleAddTask = async (newTaskContent) => {
     try {
-      console.log('[📩 새 작업 추가 요청]', newTaskContent); // 디버깅
+      const today = new Date();
+      const dateString = today.toISOString().split('T')[0] + ' 00:00:00'; // ✅ 'YYYY-MM-DD 00:00:00'
+
+      console.log('[📩 새 작업 추가 요청]', newTaskContent);
+
       const response = await axios.post(
         'http://localhost:3001/api/todos',
         {
           content: newTaskContent,
-          date: new Date().toISOString().split('T')[0],
+          date: dateString,
         },
         authHeader
       );
-      console.log('[✅ 추가 완료]', response.data); // 디버깅
+
+      console.log('[✅ 추가 완료]', response.data);
       setTodos(prev => [...prev, response.data]);
     } catch (error) {
       console.error('Error adding task:', error.response?.data || error);
