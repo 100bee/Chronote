@@ -1,0 +1,75 @@
+/* src/css/matchPage.scss */
+.match-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 100px;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  font-family: 'Pretendard', sans-serif;
+
+  .match-left {
+    flex: 1;
+    padding-right: 60px;
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff6f61, #ffa94d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #ffa94d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background-color: darken(#ffa94d, 6%);
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+
+    .error-msg {
+      margin-top: 20px;
+      color: red;
+      font-weight: 500;
+    }
+  }
+
+  .match-right {
+    flex: 1;
+    text-align: center;
+
+    .match-image {
+      max-width: 90%;
+      height: auto;
+    }
+  }
+}

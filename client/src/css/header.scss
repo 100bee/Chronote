@@ -98,11 +98,6 @@
       box-shadow: 0 2px 12px 0 rgba(80, 110, 255, 0.09);
       transition: background 0.14s;
       border: none;
-<<<<<<< HEAD
-
-      &:hover {
-        background: darken($main-color, 5%);
-=======
 
       &:hover {
         background: darken($main-color, 5%);
@@ -121,7 +116,6 @@
 
       &:hover {
         color: $main-color;
->>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
       }
     }
   }
@@ -151,8 +145,6 @@
         background: darken($main-color, 5%);
       }
     }
-<<<<<<< HEAD
-=======
 
     .logout-btn {
       color: #f5f5f5;
@@ -161,6 +153,5 @@
         color: $main-color;
       }
     }
->>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
   }
 }

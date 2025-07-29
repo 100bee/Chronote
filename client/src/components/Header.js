@@ -1,24 +1,32 @@
-<<<<<<< HEAD
-// client/src/components/Header.js
-import { Link } from 'react-router-dom';
-import '../css/header.scss';
-
-function Header({ mode, toggleMode }) {
-=======
+// src/components/Header.js
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/header.scss';
 
 function Header({ mode, toggleMode }) {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token'); // ✅ 로그인 여부 판단
+  const [nickname, setNickname] = useState('');
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem('token');
+    const savedNickname = localStorage.getItem('nickname');
+
+    if (savedToken && savedNickname) {
+      setToken(savedToken);
+      setNickname(savedNickname);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('nickname');
+    setToken('');
+    setNickname('');
     alert('로그아웃 되었습니다.');
-    navigate('/login');
+    navigate('/');
   };
 
->>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
   return (
     <header className="header">
       <div className="nav-group">
@@ -37,17 +45,15 @@ function Header({ mode, toggleMode }) {
       </div>
 
       <div className="nav-right">
+        {/* 🌗 다크모드 토글 */}
         <button className="mode-toggle-btn" onClick={toggleMode}>
           {mode === "dark" ? "☀️ Light" : "🌙 Dark"}
         </button>
-<<<<<<< HEAD
-        <Link to="/login" className="nav-item">Sign In</Link>
-        <Link to="/signup" className="nav-item get-started">Get Started</Link>
-=======
 
         {token ? (
           <>
-            <button onClick={handleLogout} className="nav-item logout-btn">Logout</button>
+            <span className="nav-item nickname">{nickname} 님</span>
+            <button className="get-started logout-btn" onClick={handleLogout}>로그아웃</button>
           </>
         ) : (
           <>
@@ -55,7 +61,6 @@ function Header({ mode, toggleMode }) {
             <Link to="/signup" className="nav-item get-started">Get Started</Link>
           </>
         )}
->>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
       </div>
     </header>
   );

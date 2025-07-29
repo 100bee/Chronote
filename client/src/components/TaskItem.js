@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 
-const TaskItem = ({ todo, refreshTodos }) => {
+const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
   const [isStarted, setIsStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleted, setIsCompleted] = useState(todo.is_completed || false);
@@ -64,8 +64,12 @@ const TaskItem = ({ todo, refreshTodos }) => {
   const handleDelete = async () => {
     if (!window.confirm('정말 이 할 일을 삭제하시겠습니까?')) return;
     try {
-      await axios.delete(`http://localhost:3001/api/todos/${todo.id}`);
-      if (refreshTodos) refreshTodos();
+      if (onDelete) {
+        await onDelete(todo.id);
+      } else {
+        await axios.delete(`http://localhost:3001/api/todos/${todo.id}`);
+        if (refreshTodos) refreshTodos();
+      }
     } catch (error) {
       console.error('삭제 실패:', error);
       alert('삭제 실패');

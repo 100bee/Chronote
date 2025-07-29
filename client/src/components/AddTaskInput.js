@@ -1,3 +1,5 @@
+// client/src/components/AddTaskInput.js
+
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import '../css/addtaskinput.scss';
@@ -7,7 +9,7 @@ const AddTaskInput = ({ onAdd }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Adding task:', text); // 이 로그가 반드시 떠야 함!
+    console.log('Adding task:', text); // 디버깅
     if (text.trim()) {
       onAdd(text);
       setText('');
@@ -24,7 +26,7 @@ const AddTaskInput = ({ onAdd }) => {
           onChange={(e) => setText(e.target.value)}
           placeholder="작업 추가"
         />
-        <button type="submit" style={{display:'none'}}>추가</button>
+        <button type="submit" style={{ display: 'none' }}>추가</button>
       </form>
     </div>
   );

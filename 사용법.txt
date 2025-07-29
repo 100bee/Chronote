@@ -1,0 +1,76 @@
+📦 Chronote 프로젝트 실행 가이드
+
+━━━━━━━━━━━━━━━━━━━━━━━
+[1] Node.js 의존성 설치
+
+# client
+cd client
+npm install
+
+# server
+cd ../server
+npm install
+
+━━━━━━━━━━━━━━━━━━━━━━━
+[2] Python 가상환경 및 의존성 설치 (pyserver 사용 시)
+
+cd ../pyserver
+
+# 가상환경 생성 (최초 1회만)
+python -m venv venv
+
+# ✅ 가상환경 활성화 방법 (운영체제에 따라 다름)
+
+# ▶ Windows (명령 프롬프트)
+venv\Scripts\activate
+
+# ▶ Windows (PowerShell)
+.\venv\Scripts\Activate.ps1
+
+# ▶ macOS / Linux / WSL
+source venv/bin/activate
+
+# 가상환경 활성화 후, 의존성 설치
+pip install -r requirements.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━
+[3] MySQL 초기 스키마 설정 (최초 1회만)
+
+# MySQL에 접속한 후 아래 명령 실행
+mysql -u root -p < mysql_init/init_schema.sql
+
+━━━━━━━━━━━━━━━━━━━━━━━
+[4] 서버 실행 순서
+
+# 1. 백엔드 API 서버 실행 (server)
+cd server
+node index.js
+
+# 2. 실시간 소켓 서버 실행 (consumer.js)
+node consumer.js
+
+# 3. 프론트엔드 React 앱 실행
+cd ../client
+npm start
+
+# 4. (선택) Python 서버 실행
+cd ../pyserver
+# 가상환경 먼저 활성화한 후:
+.\venv\Scripts\activate
+python main.py
+
+━━━━━━━━━━━━━━━━━━━━━━━
+[5] 접속 주소
+
+# 프론트엔드: http://localhost:3000
+# 백엔드 API 서버: http://localhost:3001
+# Python 서버 (FastAPI 등): http://localhost:8000 (예시)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+❗ 주의 사항
+
+- `.env` 파일은 개인별로 직접 생성해야 합니다 (예: DB 비밀번호 등)
+- 포트 번호 충돌 시 client/server의 포트를 변경해 주세요
+- Git에는 `node_modules/`, `venv/` 폴더가 올라가지 않습니다
+
+━━━━━━━━━━━━━━━━━━━━━━━

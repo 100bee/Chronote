@@ -1,12 +1,7 @@
 // src/pages/Login.js
-// 로그인 페이지
-// 이 페이지는 사용자가 로그인할 수 있는 기능을 제공합니다.
-// 사용자는 이메일과 비밀번호를 입력하여 로그인할 수 있으며,
-// 로그인 성공 시 알림 메시지가 표시되고 /todos 페이지로 이동합니다.
-
 import axios from 'axios';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ← 페이지 이동용 훅
+import { useNavigate } from 'react-router-dom';
 import '../css/login.scss';
 
 function Login() {
@@ -20,20 +15,24 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/login', form);
+      // ✅ 로그인 요청
+      const response = await axios.post('http://localhost:3001/api/login', {
+        user_id: form.email,
+        password: form.password,
+      });
 
-      // ✅ JWT 토큰 저장
+      // ✅ 응답 처리
       const token = response.data.token;
-      localStorage.setItem('token', token); // 또는 sessionStorage.setItem('token', token);
+      const nickname = response.data.user.nickname;
 
-      alert('로그인 성공!');
-<<<<<<< HEAD
-      navigate('/todos'); // ← 로그인 성공 시 할 일 페이지로 이동
-=======
-      navigate('/todos'); // 로그인 성공 시 할 일 페이지로 이동
->>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
+      localStorage.setItem('token', token);     // JWT 저장
+      localStorage.setItem('nickname', nickname); // 닉네임 저장
+
+      alert(`${nickname}님, 환영합니다!`);
+      navigate('/todos'); // ✅ 로그인 후 이동 경로
     } catch (error) {
-      alert('로그인 실패');
+      const msg = error.response?.data?.message || '서버 오류';
+      alert('로그인 실패: ' + msg);
     }
   };
 
@@ -70,11 +69,7 @@ function Login() {
         <div className="links">
           <a href="#">비밀번호 찾기</a>
           <a href="#">아이디 찾기</a>
-<<<<<<< HEAD
-          <a href="/signup">회원가입</a> {/* ← 정확한 경로 적용 */}
-=======
           <a href="/signup">회원가입</a>
->>>>>>> fc940715e91f3ede7dcf93ebc2217950a0bbddf6
         </div>
       </div>
     </div>

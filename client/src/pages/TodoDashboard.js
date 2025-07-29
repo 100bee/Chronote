@@ -1,10 +1,7 @@
 // src/pages/TodoDashboard.js
-// 투두 관리의 메인 페이지
-// 이 페이지는 투두 리스트를 보여주고, 새로운 투두를 추가할 수 있는 기능을 포함합니다.
-// 투두 리스트는 API를 통해 불러오며, 각 투두 항목은 개별적으로 완료 상태를 토글하거나 삭제할 수 있습니다.
 
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AddTaskInput from '../components/AddTaskInput';
 import TaskList from '../components/TaskList';
 import TodoHeader from '../components/TodoHeader';
@@ -15,25 +12,28 @@ const TodoDashboard = () => {
   const [todos, setTodos] = useState([]);
   const [selectedList, setSelectedList] = useState('오늘 할 일');
 
-  const token = localStorage.getItem('token'); // ✅ JWT 토큰 불러오기
+  const token = localStorage.getItem('token');
   const authHeader = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/api/todos', authHeader); // ✅ user_id 제거
-        setTodos(response.data);
-      } catch (error) {
-        console.error('Error fetching todos:', error);
-      }
-    };
-    fetchTodos();
-  }, []);
+  // ✅ 전체 투두 불러오기
+  const fetchTodos = useCallback(async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/api/todos', authHeader);
+      setTodos(response.data);
+    } catch (error) {
+      console.error('Error fetching todos:', error);
+    }
+  }, [token]);
 
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
+
+  // ✅ 완료 토글 처리
   const handleToggle = async (id, is_completed) => {
     try {
       const response = await axios.put(
@@ -47,6 +47,7 @@ const TodoDashboard = () => {
     }
   };
 
+  // ✅ 삭제 처리
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3001/api/todos/${id}`, authHeader);
@@ -56,25 +57,29 @@ const TodoDashboard = () => {
     }
   };
 
+  // ✅ 새로운 작업 추가
   const handleAddTask = async (newTaskContent) => {
     try {
+      console.log('[📩 새 작업 추가 요청]', newTaskContent); // 디버깅
       const response = await axios.post(
         'http://localhost:3001/api/todos',
         {
-          task: newTaskContent,
+          content: newTaskContent,
           date: new Date().toISOString().split('T')[0],
         },
         authHeader
       );
-      setTodos([...todos, response.data]);
+      console.log('[✅ 추가 완료]', response.data); // 디버깅
+      setTodos(prev => [...prev, response.data]);
     } catch (error) {
-      console.error('Error adding task:', error);
+      console.error('Error adding task:', error.response?.data || error);
     }
   };
 
+  // ✅ 새로고침용
   const refreshTodos = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/todos', authHeader); // ✅ user_id 제거
+      const response = await axios.get('http://localhost:3001/api/todos', authHeader);
       setTodos(response.data);
     } catch (error) {
       console.error('Error fetching todos:', error);
