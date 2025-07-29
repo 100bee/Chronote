@@ -15,9 +15,9 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // ✅ 로그인 요청
+      // ✅ 로그인 요청 - email로 수정
       const response = await axios.post('http://localhost:3001/api/login', {
-        user_id: form.email,
+        email: form.email,
         password: form.password,
       });
 
@@ -25,7 +25,7 @@ function Login() {
       const token = response.data.token;
       const nickname = response.data.user.nickname;
 
-      localStorage.setItem('token', token);     // JWT 저장
+      localStorage.setItem('token', token);       // JWT 저장
       localStorage.setItem('nickname', nickname); // 닉네임 저장
 
       alert(`${nickname}님, 환영합니다!`);

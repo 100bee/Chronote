@@ -49,3 +49,16 @@ CREATE TABLE IF NOT EXISTS chat_messages (
 -- ✅ 참고: Redis는 메모리 기반이므로 별도의 MySQL 테이블을 만들지 않음.
 -- 하지만 Redis를 통해 pub/sub으로 실시간 처리를 하고,
 -- 이 테이블에 저장하여 로그로 남기면 된다.
+
+
+-- 수정 (2025-07-29): 사용자 정보 테이블에 추가 컬럼
+ALTER TABLE user_info
+ADD COLUMN birthdate DATE NULL,
+ADD COLUMN phone_number VARCHAR(20) NULL;
+DESCRIBE user_info;
+ALTER TABLE user_info ADD COLUMN birthdate DATE NULL;
+ALTER TABLE todo ADD COLUMN start_time DATETIME;ALTER TABLE todo ADD COLUMN end_time DATETIME;
+ALTER TABLE todo
+ADD COLUMN duration INT DEFAULT 0;
+ALTER TABLE todo
+ADD COLUMN is_started TINYINT(1) DEFAULT 0 AFTER content;

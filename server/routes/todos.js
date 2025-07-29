@@ -1,14 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const verifyToken = require('../middleware/verifyToken'); // ✅ JWT 미들웨어
+const verifyToken = require('../middleware/verifyToken');
 
-// ✅ GET /api/todos - 로그인한 사용자의 투두 리스트 가져오기
+// ✅ GET /api/todos - 날짜별 투두 리스트 가져오기 (필터 추가)
 router.get('/', verifyToken, async (req, res) => {
   const userId = req.user.id;
+  const { date } = req.query;
 
   try {
-    const [rows] = await db.execute('SELECT * FROM todo WHERE user_id = ?', [userId]);
+    let rows;
+    if (date) {
+      [rows] = await db.execute(
+        'SELECT * FROM todo WHERE user_id = ? AND DATE(due_date) = ?',
+        [userId, date]
+      );
+    } else {
+      [rows] = await db.execute('SELECT * FROM todo WHERE user_id = ?', [userId]);
+    }
     res.json(rows);
   } catch (err) {
     console.error('❌ 투두 불러오기 실패:', err.message);
@@ -16,7 +25,7 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-// ✅ POST /api/todos - 새로운 투두 추가
+// ✅ POST /api/todos
 router.post('/', verifyToken, async (req, res) => {
   const { content, date } = req.body;
   const userId = req.user.id;
@@ -26,8 +35,6 @@ router.post('/', verifyToken, async (req, res) => {
   }
 
   try {
-    console.log('🛠️ INSERT 전 데이터:', { userId, content, date });
-
     const [result] = await db.execute(
       'INSERT INTO todo (user_id, content, due_date) VALUES (?, ?, ?)',
       [userId, content, date]
@@ -39,57 +46,55 @@ router.post('/', verifyToken, async (req, res) => {
       content,
       due_date: date,
       is_completed: 0,
+      duration: 0,
     };
 
-    console.log('✅ 새 작업 추가됨:', newTodo);
     res.status(201).json(newTodo);
   } catch (err) {
     console.error('❌ 작업 추가 실패:', err.message);
-    console.error('🧨 전체 오류 정보:', err); // 추가 디버깅
     res.status(500).json({ message: '서버 에러', error: err.message });
   }
 });
 
-// ✅ PUT /api/todos/update-time/:id - 기존 작업의 시작/종료 시간 업데이트
-router.put('/update-time/:id', verifyToken, async (req, res) => {
-  const { id } = req.params;
-  const { start_time, end_time } = req.body;
-  const userId = req.user.id;
-
+// ✅ PATCH /api/todos/:id/start - 시작 시간 기록
+router.patch('/:id/start', verifyToken, async (req, res) => {
+  const todoId = req.params.id;
   try {
-    const [check] = await db.execute(
-      'SELECT * FROM todo WHERE id = ? AND user_id = ?',
-      [id, userId]
+    await db.execute(
+      'UPDATE todo SET is_started = 1, start_time = NOW() WHERE id = ?',
+      [todoId]
     );
-
-    if (check.length === 0) {
-      return res.status(403).json({ message: '이 작업은 권한이 없습니다.' });
-    }
-
-    const fields = [];
-    const values = [];
-
-    if (start_time) {
-      fields.push('start_time = ?');
-      values.push(start_time);
-    }
-    if (end_time) {
-      fields.push('end_time = ?');
-      values.push(end_time);
-    }
-
-    if (fields.length === 0) {
-      return res.status(400).json({ message: '업데이트할 시간이 없습니다.' });
-    }
-
-    values.push(id, userId);
-    const sql = `UPDATE todo SET ${fields.join(', ')} WHERE id = ? AND user_id = ?`;
-
-    await db.execute(sql, values);
-
-    res.json({ message: '시간 업데이트 완료' });
+    res.json({ message: '시작 시간 기록 완료' });
   } catch (err) {
-    console.error('❌ 시간 업데이트 실패:', err.message);
+    console.error('❌ 시작 시간 기록 실패:', err.message);
+    res.status(500).json({ message: '서버 에러' });
+  }
+});
+
+// ✅ PATCH /api/todos/:id/complete - 완료 처리 및 종료 시간+duration 기록
+router.patch('/:id/complete', verifyToken, async (req, res) => {
+  const todoId = req.params.id;
+  const { duration } = req.body;  // duration(초)을 프론트에서 받아옴
+  try {
+    await db.execute(
+      'UPDATE todo SET is_completed = 1, end_time = NOW(), duration = ? WHERE id = ?',
+      [duration ?? 0, todoId]
+    );
+    res.json({ message: '완료 처리 및 종료 시간 기록 완료' });
+  } catch (err) {
+    console.error('❌ 완료 시간 기록 실패:', err.message);
+    res.status(500).json({ message: '서버 에러' });
+  }
+});
+
+// ✅ DELETE /api/todos/:id - 할 일 삭제
+router.delete('/:id', verifyToken, async (req, res) => {
+  const todoId = req.params.id;
+  try {
+    await db.execute('DELETE FROM todo WHERE id = ?', [todoId]);
+    res.json({ message: '할 일 삭제 완료' });
+  } catch (err) {
+    console.error('❌ 삭제 실패:', err.message);
     res.status(500).json({ message: '서버 에러' });
   }
 });

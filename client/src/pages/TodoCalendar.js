@@ -1,4 +1,3 @@
-// client/src/pages/TodoCalendar.js
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
@@ -10,16 +9,20 @@ const TodoCalendar = ({ mode }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
-  const userId = 1;
   const dateKey = selectedDate.toISOString().split('T')[0];
 
-  // 할 일 가져오기
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/todos?user_id=${userId}&date=${dateKey}`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:3001/api/todos?date=${dateKey}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const taskList = response.data.map(t => t.content);
       setTasks(taskList);
     } catch (err) {
+      console.error('❌ 할 일 가져오기 실패:', err);
       setTasks([]);
     }
   };
@@ -28,19 +31,27 @@ const TodoCalendar = ({ mode }) => {
     fetchTasks();
   }, [selectedDate]);
 
-  // 할 일 추가하기
   const handleAddTask = async () => {
     if (!newTask.trim()) return;
     try {
-      await axios.post('http://localhost:3001/api/todos', {
-        user_id: userId,
-        task: newTask,
-        date: dateKey,
-      });
+      const token = localStorage.getItem('token');
+      await axios.post(
+        'http://localhost:3001/api/todos',
+        {
+          content: newTask,
+          date: dateKey,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setNewTask('');
       fetchTasks();
     } catch (err) {
       alert('할 일 추가 실패');
+      console.error('❌ 할 일 추가 실패:', err);
     }
   };
 

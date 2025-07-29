@@ -27,14 +27,22 @@ const TodoDonutChart = ({ todos }) => {
         outerRadius={100}
         dataKey="value"
         labelLine={false}
-        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+        label={({ name, percent }) =>
+          <tspan style={{ fill: '#232323', fontWeight: 700 }}>
+            {`${name} ${(percent * 100).toFixed(0)}%`}
+          </tspan>
+        }
       >
         {data.map((entry, idx) => (
           <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
         ))}
       </Pie>
-      <Tooltip />
-      <Legend />
+      <Tooltip
+        contentStyle={{ color: '#232323', fontWeight: 600 }}
+        labelStyle={{ color: '#232323', fontWeight: 600 }}
+        itemStyle={{ color: '#232323', fontWeight: 600 }}
+      />
+      <Legend wrapperStyle={{ color: '#232323', fontWeight: 600 }} />
     </PieChart>
   );
 };

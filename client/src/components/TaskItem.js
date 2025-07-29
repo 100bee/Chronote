@@ -1,4 +1,3 @@
-// client/src/components/TaskItem.js
 import axios from 'axios';
 import { useState } from 'react';
 
@@ -7,13 +6,26 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleted, setIsCompleted] = useState(todo.is_completed || false);
 
+  // 서버에서 불러온 duration 값 유지
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(todo.duration || 0);
 
-  // 타이머 시작
+  // ✅ 공통 Authorization 헤더
+  const token = localStorage.getItem('token');
+  const authHeader = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  // ✅ 타이머 시작
   const handleStart = async () => {
     try {
-      await axios.patch(`http://localhost:3001/api/todos/${todo.id}/start`);
+      await axios.patch(
+        `http://localhost:3001/api/todos/${todo.id}/start`,
+        {},
+        authHeader
+      );
       setStartTime(Date.now());
       setIsStarted(true);
       setIsPaused(false);
@@ -24,7 +36,7 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
     }
   };
 
-  // 일시정지
+  // ✅ 일시정지
   const handlePause = () => {
     if (startTime) {
       const now = Date.now();
@@ -34,13 +46,13 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
     }
   };
 
-  // 재시작
+  // ✅ 재시작
   const handleResume = () => {
     setStartTime(Date.now());
     setIsPaused(false);
   };
 
-  // 완료
+  // ✅ 완료
   const handleComplete = async () => {
     const now = Date.now();
     const finalDuration = isPaused
@@ -48,7 +60,11 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
       : elapsedTime + Math.floor((now - startTime) / 1000);
 
     try {
-      await axios.patch(`http://localhost:3001/api/todos/${todo.id}/complete`);
+      await axios.patch(
+        `http://localhost:3001/api/todos/${todo.id}/complete`,
+        { duration: finalDuration }, // duration DB로 전송!
+        authHeader
+      );
       setElapsedTime(finalDuration);
       setIsCompleted(true);
       setIsStarted(false);
@@ -60,14 +76,17 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
     }
   };
 
-  // 삭제
+  // ✅ 삭제
   const handleDelete = async () => {
     if (!window.confirm('정말 이 할 일을 삭제하시겠습니까?')) return;
     try {
       if (onDelete) {
         await onDelete(todo.id);
       } else {
-        await axios.delete(`http://localhost:3001/api/todos/${todo.id}`);
+        await axios.delete(
+          `http://localhost:3001/api/todos/${todo.id}`,
+          authHeader
+        );
         if (refreshTodos) refreshTodos();
       }
     } catch (error) {
@@ -76,7 +95,7 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
     }
   };
 
-  // 시간 표시
+  // ✅ 시간 표시
   const formatTime = (seconds) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
@@ -84,7 +103,11 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
   };
 
   const content = todo?.content || '작업 내용 없음';
-  const displayTime = elapsedTime ?? todo?.duration ?? 0;
+
+  // ⭐️ 완료된 항목은 todo.duration을, 미완료는 elapsedTime을 표시!
+  const displayTime = isCompleted
+    ? todo.duration ?? 0
+    : elapsedTime ?? todo.duration ?? 0;
 
   return (
     <li className={`todo-item ${isCompleted ? 'completed' : ''}`}>

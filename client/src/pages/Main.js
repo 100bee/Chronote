@@ -3,9 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "../css/main.scss"; // 스타일 반영
-
-const userId = 1;
+import "../css/main.scss";
 
 function Main({ mode }) {
   const todayKey = new Date().toISOString().split('T')[0];
@@ -13,21 +11,52 @@ function Main({ mode }) {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
 
+  // ✅ 항상 토큰을 헤더로 포함!
+  const getAuthHeader = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인 필요');
+      window.location.href = '/login';
+      return null;
+    }
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  };
+
+  // ✅ 할 일 불러오기
+  const fetchTodos = async () => {
+    const authHeader = getAuthHeader();
+    if (!authHeader) return;
+    try {
+      const res = await axios.get(
+        `http://localhost:3001/api/todos?date=${todayKey}`,
+        authHeader
+      );
+      setTodos(res.data);
+    } catch {
+      setTodos([]);
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/api/todos?user_id=${userId}&date=${todayKey}`)
-      .then((res) => setTodos(res.data))
-      .catch(() => setTodos([]));
+    fetchTodos();
+    // eslint-disable-next-line
   }, []);
 
+  // ✅ 할 일 추가하기
   const handleAdd = async () => {
     if (!input.trim()) return;
+    const authHeader = getAuthHeader();
+    if (!authHeader) return;
     try {
-      const res = await axios.post("http://localhost:3001/api/todos", {
-        user_id: userId,
-        task: input,
-        date: todayKey,
-      });
+      const res = await axios.post(
+        "http://localhost:3001/api/todos",
+        { content: input, date: todayKey },
+        authHeader
+      );
       setTodos([...todos, res.data]);
       setInput("");
     } catch (err) {
