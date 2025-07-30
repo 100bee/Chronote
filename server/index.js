@@ -12,6 +12,7 @@ const StudyLog = require('./studyLog.model');
 const ChatRoom = require('./models/ChatRoom');
 const chronoteRoutes = require('./routes/chronote');
 const todoRoutes = require('./routes/todos');
+const rankRoutes = require('./routes/rank'); // ✅ [추가!] rank 라우터 불러오기
 
 const app = express();
 const server = http.createServer(app);
@@ -82,6 +83,7 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ 라우터 등록
 app.use('/api', chronoteRoutes);
 app.use('/api/todos', todoRoutes);
+app.use('/api/rank', rankRoutes); // ✅ [추가!] 랭크 라우터 연결
 
 // ✅ Sequelize (MySQL) 연결
 sequelize.sync({ force: false })

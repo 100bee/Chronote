@@ -65,3 +65,33 @@ ALTER TABLE todo
 ADD COLUMN duration INT DEFAULT 0;
 ALTER TABLE todo
 ADD COLUMN is_started TINYINT(1) DEFAULT 0 AFTER content;
+
+
+--랭크 페이지를 위한 추가
+ALTER TABLE user_info ADD COLUMN score INT DEFAULT 0;
+ALTER TABLE user_info ADD COLUMN tier VARCHAR(20);
+ALTER TABLE user_info ADD COLUMN last_login DATETIME;
+
+CREATE TABLE rank_tiers (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(20) NOT NULL,
+  min_score INT NOT NULL,
+  max_score INT,
+  color VARCHAR(20),     -- ex: '#B8B8B8'
+  icon VARCHAR(50)       -- ex: 'gold.png'
+);
+
+INSERT INTO rank_tiers (name, min_score, max_score, color, icon) VALUES
+('Bronze', 0, 100, '#A66E41', 'bronze.png'),
+('Silver', 101, 300, '#B8B8B8', 'silver.png'),
+('Gold', 301, 500, '#F2C94C', 'gold.png'),
+('Platinum', 501, 1000, '#60DAFB', 'platinum.png'),
+('Diamond', 1001, NULL, '#79E1E8', 'diamond.png');
+
+CREATE TABLE score_log (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT,
+  score_change INT,            -- 변화량(+/-)
+  reason VARCHAR(50),          -- 사유
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
