@@ -19,21 +19,29 @@ const TodoDashboard = () => {
     },
   };
 
-  // ✅ 전체 투두 불러오기
+  // ✅ 오늘 날짜 (YYYY-MM-DD)
+  const today = new Date();
+  const todayKey = today.toISOString().split('T')[0];
+
+  // ✅ 오늘 할 일만 서버에서 받아오기
   const fetchTodos = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/todos', authHeader);
+      // 서버에 오늘 날짜만 쿼리
+      const response = await axios.get(
+        `http://localhost:3001/api/todos?date=${todayKey}`,
+        authHeader
+      );
       setTodos(response.data);
     } catch (error) {
       console.error('Error fetching todos:', error);
     }
-  }, [token]);
+  }, [token, todayKey]);
 
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
 
-  // ✅ 완료 토글 처리
+  // ✅ 완료 토글 처리 (서버 라우터에 맞게 수정 필요시 반영)
   const handleToggle = async (id, is_completed) => {
     try {
       const response = await axios.put(
@@ -57,12 +65,10 @@ const TodoDashboard = () => {
     }
   };
 
-  // ✅ 새로운 작업 추가 (DATETIME 형식으로 변경)
+  // ✅ 새로운 작업 추가 (오늘 날짜로 저장)
   const handleAddTask = async (newTaskContent) => {
     try {
-      const today = new Date();
-      const dateString = today.toISOString().split('T')[0] + ' 00:00:00'; // ✅ 'YYYY-MM-DD 00:00:00'
-
+      const dateString = todayKey; // 'YYYY-MM-DD'만 전달
       console.log('[📩 새 작업 추가 요청]', newTaskContent);
 
       const response = await axios.post(
@@ -81,10 +87,13 @@ const TodoDashboard = () => {
     }
   };
 
-  // ✅ 새로고침용
+  // ✅ 새로고침용 (오늘만)
   const refreshTodos = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/todos', authHeader);
+      const response = await axios.get(
+        `http://localhost:3001/api/todos?date=${todayKey}`,
+        authHeader
+      );
       setTodos(response.data);
     } catch (error) {
       console.error('Error fetching todos:', error);

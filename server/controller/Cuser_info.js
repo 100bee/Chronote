@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const { User_info } = require("../models");
 
-const SECRET_KEY = "ROOT1234"; 
+const SECRET_KEY = "ROOT1234"; // .env에서 불러오게 하면 더 좋음
 
 // JWT 토큰 생성 함수
 const generateToken = (user) => {
@@ -14,7 +14,7 @@ const generateToken = (user) => {
       nickname: user.nickname,
     },
     SECRET_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "7d" }
   );
 };
 
@@ -22,11 +22,11 @@ const generateToken = (user) => {
 exports.userLogin = async (req, res) => {
   try {
     const { user_id, password } = req.body;
+    if (!user_id || !password) {
+      return res.status(400).json({ message: "user_id와 password는 필수입니다." });
+    }
     const user = await User_info.findOne({
-      where: {
-        user_id,
-        password,
-      },
+      where: { user_id, password },
     });
 
     if (user) {
@@ -45,6 +45,10 @@ exports.userLogin = async (req, res) => {
 exports.userRegister = async (req, res) => {
   try {
     const { user_id, password, name, nickname, birth_date, phone_number } = req.body;
+
+    if (!user_id || !password || !name) {
+      return res.status(400).json({ message: "user_id, password, name은 필수입니다." });
+    }
 
     const existingUser = await User_info.findOne({ where: { user_id } });
     if (existingUser) {
@@ -67,7 +71,7 @@ exports.userRegister = async (req, res) => {
   }
 };
 
-// 토큰 유효성 확인 미들웨어 (필요 시 라우터에서 사용)
+// 토큰 유효성 확인 미들웨어
 exports.verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "토큰이 없습니다." });
@@ -86,6 +90,7 @@ exports.verifyToken = (req, res, next) => {
 exports.checkUserName = async (req, res) => {
   try {
     const { nickname } = req.body;
+    if (!nickname) return res.status(400).json({ message: "nickname은 필수입니다." });
     const user = await User_info.findOne({ where: { nickname } });
     res.status(200).json({ available: !user });
   } catch (err) {
@@ -98,6 +103,7 @@ exports.checkUserName = async (req, res) => {
 exports.checkUserId = async (req, res) => {
   try {
     const { user_id } = req.body;
+    if (!user_id) return res.status(400).json({ message: "user_id는 필수입니다." });
     const user = await User_info.findOne({ where: { user_id } });
     res.status(200).json({ available: !user });
   } catch (err) {

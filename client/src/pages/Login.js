@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import '../css/login.scss';
 
 function Login() {
-  const [form, setForm] = useState({ email: '', password: '' });
+  // ✅ email → user_id로 필드명 변경
+  const [form, setForm] = useState({ user_id: '', password: '' });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,9 +16,9 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // ✅ 로그인 요청 - email로 수정
+      // ✅ 로그인 요청 - user_id로 전송
       const response = await axios.post('http://localhost:3001/api/login', {
-        email: form.email,
+        user_id: form.user_id,
         password: form.password,
       });
 
@@ -29,7 +30,7 @@ function Login() {
       localStorage.setItem('nickname', nickname); // 닉네임 저장
 
       alert(`${nickname}님, 환영합니다!`);
-      navigate('/todos'); // ✅ 로그인 후 이동 경로
+      navigate('/todos');
     } catch (error) {
       const msg = error.response?.data?.message || '서버 오류';
       alert('로그인 실패: ' + msg);
@@ -42,9 +43,9 @@ function Login() {
         <h1 className="logo">ChroNote</h1>
         <form className="login-form" onSubmit={handleSubmit}>
           <input
-            name="email"
+            name="user_id" // ✅ email → user_id로 바꿈
             placeholder="아이디 또는 이메일"
-            value={form.email}
+            value={form.user_id}
             onChange={handleChange}
           />
           <input

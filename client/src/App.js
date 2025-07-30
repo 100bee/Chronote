@@ -1,3 +1,4 @@
+// client/src/App.js
 import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
@@ -18,6 +19,8 @@ import TodoDashboard from './pages/TodoDashboard';
 import ChatRoomPage from './pages/ChatRoomPage';
 import MatchingPage from './pages/MatchingPage';
 
+import axios from 'axios';
+
 function App() {
   const [tasksByDate, setTasksByDate] = useState({});
   const [mode, setMode] = useState('light');
@@ -29,6 +32,23 @@ function App() {
   useEffect(() => {
     document.body.className = mode === 'dark' ? 'darkmode' : 'lightmode';
   }, [mode]);
+
+  // ✅ JWT 만료 시 자동 로그아웃 인터셉터(최초 1회만 등록)
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        }
+        return Promise.reject(error);
+      }
+    );
+    // 언마운트 시 인터셉터 해제(메모리 누수 방지)
+    return () => axios.interceptors.response.eject(interceptor);
+  }, []);
 
   // ✅ 헤더 숨길 경로
   const hideHeaderPaths = ['/', '/login', '/signup'];

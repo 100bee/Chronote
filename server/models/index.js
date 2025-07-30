@@ -1,3 +1,4 @@
+// server/models/index.js
 const Sequelize = require('sequelize');
 const db = {};
 

@@ -109,3 +109,24 @@ PS C:\Redis-x64-5.0.14.1> ./redis-server.exe
 MongoDB (그냥 설치)
 몽고디비는 그냥 설치하면 NoSQL특성상 코드에 따라 스키마 형성
 대신 별도로 Compass를 설치해서 서버가 켜져있는지 확인해야함
+
+
+설치 라이브러리
+1. 파이썬 환경
+.\venv\Scripts\activate (가상환경키기)
+pip install fastapi uvicorn (다운받기)
+python -m uvicorn main:app --reload --port 8000 (서버 실행)
+
+2. Redis
+npm install redis
+
+
+
+.env (내용)
+PORT=3001
+JWT_SECRET=ROOT1234
+JWT_EXPIRES_IN=7d
+MYSQL_HOST=localhost
+MYSQL_USER=chronote_user
+MYSQL_PASSWORD=1234
+MYSQL_DATABASE=chronote_db

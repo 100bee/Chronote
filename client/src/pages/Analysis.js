@@ -7,12 +7,15 @@ import TodoDonutChart from '../components/TodoDonutChart';
 const Analysis = () => {
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token'); // 토큰 가져오기
+  // 오늘 날짜(YYYY-MM-DD)
+  const todayKey = new Date().toISOString().split('T')[0];
 
-    axios.get('http://localhost:3001/api/todos', {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    axios.get(`http://localhost:3001/api/todos?date=${todayKey}`, {
       headers: {
-        Authorization: `Bearer ${token}`, // ✅ 인증 헤더 추가
+        Authorization: `Bearer ${token}`,
       },
     })
       .then(res => setTodos(res.data))
@@ -20,7 +23,7 @@ const Analysis = () => {
         console.error('📛 분석 페이지 투두 불러오기 실패:', err);
         setTodos([]);
       });
-  }, []);
+  }, [todayKey]);
 
   return (
     <div style={{ padding: '20px', color: 'white' }}>
