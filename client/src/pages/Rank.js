@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ScoreChart from '../components/ScoreChart';
 import ScoreLog from '../components/ScoreLog';
@@ -11,36 +12,32 @@ const RANK_BOUNDS = {
   Diamond: { min: 1001, max: 99999 },
 };
 
-const dummyUserInfo = {
-  user_id: '1',
-  nickname: '테스트유저',
-  tier: 'Bronze',
-  score: 50,
-  nextTier: {
-    name: 'Silver',
-    requiredScore: 51,
-    requiredTodos: 3,
-    requiredAttendance: 5,
-  },
-};
-
-const dummyRanking = [
-  { user_id: '1', nickname: '테스트유저', tier: 'Bronze', score: 50 },
-  { user_id: '2', nickname: '실버유저', tier: 'Silver', score: 150 },
-  { user_id: '3', nickname: '골드유저', tier: 'Gold', score: 400 },
-  { user_id: '4', nickname: '플래티넘유저', tier: 'Platinum', score: 700 },
-  { user_id: '5', nickname: '다이아유저', tier: 'Diamond', score: 1500 },
-];
-
 const Rank = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setUserInfo(dummyUserInfo);
-    setRanking(dummyRanking);
-    setLoading(false);
+    const fetchRankData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const userRes = await axios.get('http://localhost:3001/api/rank/userinfo', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const rankRes = await axios.get('http://localhost:3001/api/rank');
+
+        setUserInfo(userRes.data);
+        setRanking(rankRes.data);
+      } catch (err) {
+        console.error('랭크 데이터 로딩 실패:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRankData();
   }, []);
 
   if (loading) return <div>로딩중...</div>;
@@ -58,10 +55,12 @@ const Rank = () => {
         <div className="user-info">
           <p><strong>ID:</strong> {userInfo.user_id}</p>
           <p>
-            <strong>닉네임:</strong> <span className={`nickname ${userInfo.tier?.toLowerCase()}`}>{userInfo.nickname}</span>
+            <strong>닉네임:</strong>{' '}
+            <span className={`nickname ${tier.toLowerCase()}`}>{userInfo.nickname}</span>
           </p>
           <p>
-            <strong>현재 랭크:</strong> <span className={`nickname ${userInfo.tier?.toLowerCase()}`}>{userInfo.tier}</span>
+            <strong>현재 랭크:</strong>{' '}
+            <span className={`nickname ${tier.toLowerCase()}`}>{tier}</span>
           </p>
           <p><strong>보유 점수:</strong> {userInfo.score}점</p>
         </div>
@@ -93,7 +92,8 @@ const Rank = () => {
           <h3>다음 랭크 조건</h3>
           <ul>
             <li>
-              다음 랭크: <span className={`nickname ${userInfo.nextTier?.name?.toLowerCase()}`}>
+              다음 랭크:{' '}
+              <span className={`nickname ${userInfo.nextTier?.name?.toLowerCase()}`}>
                 <strong>{userInfo.nextTier?.name}</strong>
               </span>
             </li>
