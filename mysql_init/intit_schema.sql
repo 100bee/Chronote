@@ -1,78 +1,73 @@
--- 📌 Chronote 프로젝트 초기 스키마 설정
-
--- ✅ 1. 사용할 데이터베이스 선택
+-- ✅ 데이터베이스 생성 및 선택
 CREATE DATABASE IF NOT EXISTS chronote;
 USE chronote;
 
--- ✅ 2. users 테이블 생성 (회원 정보)
-CREATE TABLE IF NOT EXISTS users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(255) NOT NULL UNIQUE,
+-- ✅ user_info: 사용자 정보 테이블
+CREATE TABLE IF NOT EXISTS user_info (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id VARCHAR(16) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  nickname VARCHAR(255) NOT NULL DEFAULT '익명',
-  name VARCHAR(100) DEFAULT NULL,
-  birthdate DATE DEFAULT NULL,
+  name VARCHAR(50) NOT NULL,
+  birth_date DATE DEFAULT NULL,
   phone_number VARCHAR(20) DEFAULT NULL,
-  score INT DEFAULT 0,
-  tier VARCHAR(20),
-  last_login DATETIME DEFAULT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  nickname VARCHAR(50) DEFAULT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  score INT(11) DEFAULT 0,
+  tier VARCHAR(20) DEFAULT NULL,
+  last_login DATETIME DEFAULT NULL
 );
 
--- ✅ 3. todos 테이블 생성 (할 일 기록)
+-- ✅ todos: 할 일 테이블
 CREATE TABLE IF NOT EXISTS todos (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  content VARCHAR(255) NOT NULL,
-  is_started BOOLEAN DEFAULT FALSE,
-  is_completed BOOLEAN DEFAULT FALSE,
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT(11) NOT NULL,
+  content TEXT NOT NULL,
+  is_started TINYINT(1) DEFAULT 0,
+  is_completed TINYINT(1) DEFAULT 0,
+  is_shared TINYINT(1) DEFAULT 0,
+  due_date DATETIME DEFAULT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   start_time DATETIME DEFAULT NULL,
   end_time DATETIME DEFAULT NULL,
-  duration INT DEFAULT 0,
-  date DATE DEFAULT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  duration INT(11) DEFAULT 0
 );
 
--- ✅ 4. 채팅 메시지 로그 테이블
-CREATE TABLE IF NOT EXISTS chat_messages (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  room_id VARCHAR(100) NOT NULL,
-  sender VARCHAR(100) NOT NULL,
-  message TEXT NOT NULL,
+-- ✅ rank_tiers: 랭크 티어 정의 테이블
+CREATE TABLE IF NOT EXISTS rank_tiers (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(20) NOT NULL,
+  min_score INT(11) NOT NULL,
+  max_score INT(11) DEFAULT NULL,
+  color VARCHAR(20) DEFAULT NULL,
+  icon VARCHAR(50) DEFAULT NULL
+);
+
+-- ✅ score_log: 점수 변동 로그
+CREATE TABLE IF NOT EXISTS score_log (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT(11),
+  score_change INT(11),
+  reason VARCHAR(50),
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- ✅ 5. 랭크 티어 테이블
-CREATE TABLE IF NOT EXISTS rank_tiers (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(20) NOT NULL,
-  min_score INT NOT NULL,
-  max_score INT,
-  color VARCHAR(20),         -- 예: '#F2C94C'
-  icon VARCHAR(50)           -- 예: 'gold.png'
-);
-
--- ✅ 6. 점수 변화 로그 테이블
-CREATE TABLE IF NOT EXISTS score_log (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
-  score_change INT,
-  reason VARCHAR(50),
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
--- ✅ 7. 출석 로그 테이블
+-- ✅ attendance_log: 출석 로그
 CREATE TABLE IF NOT EXISTS attendance_log (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT(11),
   date DATE,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- ✅ 8. 랭크 티어 데이터 초기 삽입
+-- ✅ group_member: 그룹 멤버 테이블
+CREATE TABLE IF NOT EXISTS group_member (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  group_id INT(11) NOT NULL,
+  user_id INT(11) NOT NULL,
+  joined_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ✅ rank_tiers 초기 데이터 삽입
 INSERT INTO rank_tiers (name, min_score, max_score, color, icon) VALUES
   ('Bronze', 0, 100, '#A66E41', 'bronze.png'),
   ('Silver', 101, 300, '#B8B8B8', 'silver.png'),
@@ -80,14 +75,14 @@ INSERT INTO rank_tiers (name, min_score, max_score, color, icon) VALUES
   ('Platinum', 501, 1000, '#60DAFB', 'platinum.png'),
   ('Diamond', 1001, NULL, '#79E1E8', 'diamond.png');
 
--- ✅ 9. 테스트용 사용자 데이터 (중복 방지)
-INSERT INTO users (id, email, password, nickname, name, score, tier)
+-- ✅ 테스트용 유저 데이터 삽입
+INSERT INTO user_info (user_id, password, name, nickname, score, tier)
 VALUES
-  (1, 'bronze@test.com', 'pw1', 'Bronze유저', 'Bronze', 10, 'Bronze'),
-  (2, 'silver@test.com', 'pw2', 'Silver유저', 'Silver', 150, 'Silver'),
-  (3, 'gold@test.com', 'pw3', 'Gold유저', 'Gold', 400, 'Gold'),
-  (4, 'platinum@test.com', 'pw4', 'Platinum유저', 'Platinum', 700, 'Platinum'),
-  (5, 'diamond@test.com', 'pw5', 'Diamond유저', 'Diamond', 1500, 'Diamond')
+  ('1', 'pw1', 'Bronze',   'Bronze유저',   10,   'Bronze'),
+  ('2', 'pw2', 'Silver',   'Silver유저',   150,  'Silver'),
+  ('3', 'pw3', 'Gold',     'Gold유저',     400,  'Gold'),
+  ('4', 'pw4', 'Platinum', 'Platinum유저', 700,  'Platinum'),
+  ('5', 'pw5', 'Diamond',  'Diamond유저',  1500, 'Diamond')
 ON DUPLICATE KEY UPDATE
   nickname = VALUES(nickname),
   score = VALUES(score),
