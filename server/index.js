@@ -92,7 +92,20 @@ sequelize.sync({ force: false })
 mongoose.connect('mongodb://localhost:27017/chronote', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => console.log('✅ MongoDB 연결 성공'))
+}).then(async () => {
+  console.log('✅ MongoDB 연결 성공');
+
+  // ★★★ [중요] ChatRoom에 12시간 TTL 인덱스 추가 (최초 1회만 생성, 여러번 실행해도 안전)
+  try {
+    await ChatRoom.collection.createIndex(
+      { "createdAt": 1 },
+      { expireAfterSeconds: 43200 } // 12시간 = 43,200초
+    );
+    console.log('✅ ChatRoom TTL(12시간) 인덱스 설정 완료!');
+  } catch (err) {
+    console.error('❌ ChatRoom TTL 인덱스 설정 실패:', err);
+  }
+})
   .catch(err => console.error('❌ MongoDB 연결 실패:', err));
 
 // ✅ study log 저장 API (MongoDB)
