@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS user_info (
 );
 
 -- ✅ todos: 할 일 테이블
-CREATE TABLE IF NOT EXISTS todos (
+CREATE TABLE IF NOT EXISTS todo (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   user_id INT(11) NOT NULL,
   content TEXT NOT NULL,
