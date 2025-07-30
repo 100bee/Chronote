@@ -12,8 +12,9 @@ const StudyLog = require('./studyLog.model');
 const ChatRoom = require('./models/ChatRoom');
 const chronoteRoutes = require('./routes/chronote');
 const todoRoutes = require('./routes/todos');
-const rankRoutes = require('./routes/rank');           // ✅ 랭크 라우터
+const rankRoutes = require('./routes/rank');             // ✅ 랭크 라우터
 const attendanceRoutes = require('./routes/attendance'); // ✅ 출석 라우터
+const scorelogRoutes = require('./routes/scorelog');     // ✅ 점수로그 라우터 (추가!)
 
 const app = express();
 const server = http.createServer(app);
@@ -84,8 +85,9 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ 라우터 등록
 app.use('/api', chronoteRoutes);
 app.use('/api/todos', todoRoutes);
-app.use('/api/rank', rankRoutes);           // ✅ 랭크
-app.use('/api/attendance', attendanceRoutes); // ✅ 출석
+app.use('/api/rank', rankRoutes);               // ✅ 랭크
+app.use('/api/attendance', attendanceRoutes);   // ✅ 출석
+app.use('/api/scorelog', scorelogRoutes);       // ✅ 점수로그 (추가!)
 
 // ✅ Sequelize (MySQL) 연결
 sequelize.sync({ force: false })
