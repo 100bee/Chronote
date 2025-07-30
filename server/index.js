@@ -12,7 +12,8 @@ const StudyLog = require('./studyLog.model');
 const ChatRoom = require('./models/ChatRoom');
 const chronoteRoutes = require('./routes/chronote');
 const todoRoutes = require('./routes/todos');
-const rankRoutes = require('./routes/rank'); // ✅ [추가!] rank 라우터 불러오기
+const rankRoutes = require('./routes/rank');           // ✅ 랭크 라우터
+const attendanceRoutes = require('./routes/attendance'); // ✅ 출석 라우터
 
 const app = express();
 const server = http.createServer(app);
@@ -83,7 +84,8 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ 라우터 등록
 app.use('/api', chronoteRoutes);
 app.use('/api/todos', todoRoutes);
-app.use('/api/rank', rankRoutes); // ✅ [추가!] 랭크 라우터 연결
+app.use('/api/rank', rankRoutes);           // ✅ 랭크
+app.use('/api/attendance', attendanceRoutes); // ✅ 출석
 
 // ✅ Sequelize (MySQL) 연결
 sequelize.sync({ force: false })
@@ -135,6 +137,23 @@ app.get('/api/study-logs', async (req, res) => {
     console.error(err);
     res.status(500).json({ message: 'MongoDB 조회 오류' });
   }
+});
+
+// ✅ node-cron 스케줄러 (미접속 감점 & 연초 초기화)
+const cron = require('node-cron');
+const penaltyForInactivity = require('./utils/penalty');
+const resetAllScores = require('./utils/resetScore');
+
+// 매일 새벽 3시 0분에 7일 미접속 감점
+cron.schedule('0 3 * * *', async () => {
+  console.log('[CRON] 7일 미접속 유저 감점 실행');
+  await penaltyForInactivity();
+});
+
+// 매년 1월 1일 새벽 3시 0분에 점수 초기화
+cron.schedule('0 3 1 1 *', async () => {
+  console.log('[CRON] 연초 점수 초기화 실행');
+  await resetAllScores();
 });
 
 server.listen(PORT, () => {

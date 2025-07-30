@@ -120,6 +120,9 @@ python -m uvicorn main:app --reload --port 8000 (서버 실행)
 2. Redis
 npm install redis
 
+3. rank에서 사용하는 스케줄러 설치
+npm install node-cron (server에 설치)
+
 
 
 .env (내용)

@@ -95,3 +95,10 @@ CREATE TABLE score_log (
   reason VARCHAR(50),          -- 사유
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE attendance_log (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT,
+  date DATE,  -- 출석한 날짜 (YYYY-MM-DD)
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
