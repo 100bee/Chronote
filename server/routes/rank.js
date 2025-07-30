@@ -3,10 +3,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// ✅ 내 정보 API
+// ✅ 내 정보 API (/api/rank/userinfo)
 router.get('/userinfo', async (req, res) => {
   // 실제 서비스에서는 req.user.id(로그인 정보) 사용!
-  const userId = 1; // 테스트용
+  const userId = 1; // 테스트용 (로그인 연동 시 교체)
   try {
     const [[user]] = await db.query(
       `SELECT user_id, nickname, score, tier FROM user_info WHERE user_id = ?`,
@@ -14,7 +14,7 @@ router.get('/userinfo', async (req, res) => {
     );
     if (!user) return res.status(404).json({ message: '유저 정보 없음' });
 
-    // 다음 티어 계산
+    // 다음 티어 계산 (없으면 null)
     const [[nextTier]] = await db.query(
       `SELECT name, min_score FROM rank_tiers WHERE min_score > ? ORDER BY min_score ASC LIMIT 1`,
       [user.score]
@@ -38,8 +38,8 @@ router.get('/userinfo', async (req, res) => {
   }
 });
 
-// ✅ 전체 랭킹 API
-router.get('/list', async (req, res) => {
+// ✅ 전체 랭킹 API (/api/rank)
+router.get('/', async (req, res) => {
   try {
     const [rows] = await db.query(
       `SELECT user_id, nickname, score, tier FROM user_info ORDER BY score DESC LIMIT 20`

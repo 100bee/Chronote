@@ -102,3 +102,17 @@ CREATE TABLE attendance_log (
   date DATE,  -- 출석한 날짜 (YYYY-MM-DD)
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- test를 위한 유저
+INSERT INTO user_info (user_id, password, name, nickname, score, tier)
+VALUES
+  ('1', 'pw1', 'Bronze',   'Bronze유저',   10,   'Bronze'),
+  ('2', 'pw2', 'Silver',   'Silver유저',   150,  'Silver'),
+  ('3', 'pw3', 'Gold',     'Gold유저',     400,  'Gold'),
+  ('4', 'pw4', 'Platinum', 'Platinum유저', 700,  'Platinum'),
+  ('5', 'pw5', 'Diamond',  'Diamond유저',  1500, 'Diamond')
+ON DUPLICATE KEY UPDATE
+  nickname = VALUES(nickname),
+  score = VALUES(score),
+  tier = VALUES(tier);

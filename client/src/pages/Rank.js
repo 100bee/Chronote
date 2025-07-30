@@ -1,36 +1,55 @@
-// client/src/pages/RankPage.js
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import ScoreChart from '../components/ScoreChart';
+import ScoreLog from '../components/ScoreLog';
 import '../css/rankPage.scss';
 
-const RankPage = () => {
-  // 상태 변수
+const RANK_BOUNDS = {
+  Bronze: { min: 0, max: 100 },
+  Silver: { min: 101, max: 300 },
+  Gold: { min: 301, max: 500 },
+  Platinum: { min: 501, max: 1000 },
+  Diamond: { min: 1001, max: 99999 },
+};
+
+const dummyUserInfo = {
+  user_id: '1',
+  nickname: '테스트유저',
+  tier: 'Bronze',
+  score: 50,
+  nextTier: {
+    name: 'Silver',
+    requiredScore: 51,
+    requiredTodos: 3,
+    requiredAttendance: 5,
+  },
+};
+
+const dummyRanking = [
+  { user_id: '1', nickname: '테스트유저', tier: 'Bronze', score: 50 },
+  { user_id: '2', nickname: '실버유저', tier: 'Silver', score: 150 },
+  { user_id: '3', nickname: '골드유저', tier: 'Gold', score: 400 },
+  { user_id: '4', nickname: '플래티넘유저', tier: 'Platinum', score: 700 },
+  { user_id: '5', nickname: '다이아유저', tier: 'Diamond', score: 1500 },
+];
+
+const Rank = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 데이터 불러오기
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 내 정보 (로그인 기반 API로 수정)
-        const userRes = await axios.get('/api/userinfo');
-        setUserInfo(userRes.data);
-
-        // 랭킹 리스트
-        const rankRes = await axios.get('/api/rank');
-        setRanking(rankRes.data);
-      } catch (err) {
-        console.error('랭킹 페이지 데이터 로딩 오류:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    setUserInfo(dummyUserInfo);
+    setRanking(dummyRanking);
+    setLoading(false);
   }, []);
 
   if (loading) return <div>로딩중...</div>;
   if (!userInfo) return <div>유저 정보를 불러오지 못했습니다.</div>;
+
+  const tier = userInfo.tier || 'Bronze';
+  const { min, max } = RANK_BOUNDS[tier] || { min: 0, max: 100 };
+  let percent = ((userInfo.score - min) / (max - min)) * 100;
+  percent = Math.max(0, Math.min(100, percent));
 
   return (
     <div className="rank-page">
@@ -39,15 +58,36 @@ const RankPage = () => {
         <div className="user-info">
           <p><strong>ID:</strong> {userInfo.user_id}</p>
           <p>
-            <strong>닉네임:</strong>
-            <span className={`nickname ${userInfo.tier?.toLowerCase()}`}>{userInfo.nickname}</span>
+            <strong>닉네임:</strong> <span className={`nickname ${userInfo.tier?.toLowerCase()}`}>{userInfo.nickname}</span>
           </p>
           <p>
-            <strong>현재 랭크:</strong>
-            <span className={`nickname ${userInfo.tier?.toLowerCase()}`}>{userInfo.tier}</span>
+            <strong>현재 랭크:</strong> <span className={`nickname ${userInfo.tier?.toLowerCase()}`}>{userInfo.tier}</span>
           </p>
           <p><strong>보유 점수:</strong> {userInfo.score}점</p>
         </div>
+
+        <div style={{
+          border: '1px solid #aaa',
+          borderRadius: 10,
+          width: 250,
+          height: 20,
+          background: '#eee',
+          margin: '20px 0'
+        }}>
+          <div style={{
+            height: '100%',
+            width: `${percent}%`,
+            background: '#82ca9d',
+            borderRadius: 10
+          }} />
+        </div>
+        <p style={{ fontSize: 13, textAlign: 'center', marginBottom: 8 }}>
+          내 티어 내 점수 달성률: {percent.toFixed(1)}%
+        </p>
+
+        <ScoreLog userId={userInfo.user_id} />
+        <ScoreChart userId={userInfo.user_id} />
+
         <hr />
         <div className="next-rank">
           <h3>다음 랭크 조건</h3>
@@ -79,4 +119,4 @@ const RankPage = () => {
   );
 };
 
-export default RankPage;
+export default Rank;
