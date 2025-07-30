@@ -52,6 +52,9 @@ CREATE TABLE IF NOT EXISTS chat_messages (
 
 
 -- 수정 (2025-07-29): 사용자 정보 테이블에 추가 컬럼
+-- 시작시간, 끝나는 시간 등 추가해서 
+-- 얼만큼 Todo를 수행했는지 계산
+-- 나중에 init 정리 한 번 해야함
 ALTER TABLE user_info
 ADD COLUMN birthdate DATE NULL,
 ADD COLUMN phone_number VARCHAR(20) NULL;

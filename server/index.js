@@ -1,3 +1,4 @@
+// server/index.js
 require('dotenv').config();
 
 const express = require('express');
@@ -6,13 +7,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const { sequelize } = require('./models');
-const db = require('./db'); // MySQL raw query용
-const StudyLog = require('./studyLog.model'); // MongoDB 모델
-const ChatRoom = require('./models/ChatRoom'); // MongoDB 모델
-const chronoteRoutes = require('./routes/chronote'); // /api 경로 통합 라우터
-const todoRoutes = require('./routes/todos'); // 할 일 관련 라우터
+const db = require('./db');
+const StudyLog = require('./studyLog.model');
+const ChatRoom = require('./models/ChatRoom');
+const chronoteRoutes = require('./routes/chronote');
+const todoRoutes = require('./routes/todos');
 
-// ✅ express 및 서버 초기화
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
@@ -26,7 +26,7 @@ const io = new Server(server, {
   }
 });
 
-// ✅ 소켓 연결 처리
+// ✅ [채팅방 매칭] 소켓 이벤트 (AI 매칭 전용, 나머지 채팅 로직은 chatsocket.js에서!)
 io.on('connection', (socket) => {
   console.log('✅ 사용자 소켓 연결됨:', socket.id);
 
@@ -72,14 +72,16 @@ io.on('connection', (socket) => {
   });
 });
 
-// ✅ 미들웨어 설정
+// ✅ chatsocket.js에서 소켓 채팅 로직 전체 위임
+require('./chatsocket')(io);
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ✅ 라우터 등록
-app.use('/api', chronoteRoutes);        // 회원가입, 로그인 등
-app.use('/api/todos', todoRoutes);      // 할 일 관련 API
+app.use('/api', chronoteRoutes);
+app.use('/api/todos', todoRoutes);
 
 // ✅ Sequelize (MySQL) 연결
 sequelize.sync({ force: false })
@@ -120,7 +122,6 @@ app.get('/api/study-logs', async (req, res) => {
   }
 });
 
-// ✅ 서버 실행
 server.listen(PORT, () => {
   console.log(`✅ 서버 실행됨: http://localhost:${PORT}`);
 });

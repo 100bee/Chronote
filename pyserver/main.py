@@ -1,3 +1,5 @@
+# pyserver/main.py
+# FastAPI 서버 설정 및 기본 엔드포인트 구현
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
