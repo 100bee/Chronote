@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer, util
 import google.generativeai as genai
 from pymongo import MongoClient
-from jose import JWTError, jwt  # ✅ JWT 디코딩
+from jose import JWTError, jwt
 
 # --- 1. 모델 및 API 키 설정 ---
 embedding_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
@@ -189,12 +189,23 @@ def get_chatrooms():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# ✅ 추가된 부분: 채팅방 단일 조회 API
+@app.get("/chatrooms/{room_id}")
+def get_chatroom_by_id(room_id: str):
+    try:
+        room = chatroom_collection.find_one({"roomId": room_id}, {"_id": 0})
+        if not room:
+            raise HTTPException(status_code=404, detail="채팅방을 찾을 수 없습니다.")
+        return room
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 # --- 10. 메시지 저장 및 조회 ---
+
 @app.post("/messages")
 def save_message(data: ChatMessage, user_id: str = Depends(get_current_user_id)):
     try:
         chat_data = data.dict()
-        chat_data["sender"] = user_id  # ✅ 로그인한 유저 ID 사용
+        chat_data["sender"] = user_id
         chat_data["timestamp"] = chat_data["timestamp"].isoformat()
         message_collection.insert_one(chat_data)
         return {"message": "메시지 저장 완료"}

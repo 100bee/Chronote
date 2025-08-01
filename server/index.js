@@ -1,6 +1,6 @@
 // server/index.js
 require('dotenv').config();
-
+require('./consumer');
 const express = require('express');
 const http = require('http');
 const cors = require('cors');

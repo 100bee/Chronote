@@ -10,12 +10,45 @@ const ChatRoomPage = () => {
   const { roomId } = useParams();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [roomTitle, setRoomTitle] = useState(''); // ✅ 채팅방 제목 상태
   const messagesEndRef = useRef(null);
   const nickname = localStorage.getItem("nickname");
+  const myUserId = localStorage.getItem("user_id");
 
-  // ✅ 방 입장 및 소켓 리스너 설정
+  // ✅ 방 입장 + 제목/이전메시지 불러오기 + 소켓 리스너 등록
   useEffect(() => {
     socket.emit('joinRoom', roomId);
+
+    // ✅ 채팅방 제목 불러오기
+    const fetchRoomTitle = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/chatrooms/${roomId}`);
+        setRoomTitle(res.data.title);
+      } catch (err) {
+        console.error('❌ 채팅방 제목 불러오기 실패:', err);
+        setRoomTitle('(제목 없음)');
+      }
+    };
+
+    // ✅ FastAPI에서 이전 메시지 불러오기
+    const fetchMessages = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/messages/${roomId}`);
+        const fetched = res.data;
+
+        const processed = fetched.map(msg => ({
+          ...msg,
+          sender: msg.sender === myUserId ? nickname : msg.sender
+        }));
+
+        setMessages(processed);
+      } catch (err) {
+        console.error('❌ 메시지 불러오기 실패:', err);
+      }
+    };
+
+    fetchRoomTitle();
+    fetchMessages();
 
     socket.on('newMessage', (msg) => {
       setMessages(prev => [...prev, msg]);
@@ -46,7 +79,6 @@ const ChatRoomPage = () => {
       message: input,
     };
 
-    // ✅ 실시간 전송 (프론트에는 임시로 '나' 표시)
     socket.emit('chatMessage', {
       ...newMsg,
       sender: nickname || '나',
@@ -54,7 +86,6 @@ const ChatRoomPage = () => {
 
     setMessages(prev => [...prev, { ...newMsg, sender: nickname || '나' }]);
 
-    // ✅ FastAPI 서버에 JWT 인증 포함 메시지 저장
     try {
       await axios.post('http://localhost:8000/messages', newMsg, {
         headers: {
@@ -70,7 +101,9 @@ const ChatRoomPage = () => {
 
   return (
     <div className="chatroom-container">
-      <div className="chatroom-header">🗨️ 채팅방 코드: {roomId}</div>
+      <div className="chatroom-header">
+        🗨️ 채팅방: {roomTitle} ({roomId})
+      </div>
 
       <div className="chatroom-messages">
         {messages.map((msg, idx) => (
