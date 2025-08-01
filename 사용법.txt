@@ -117,6 +117,12 @@ MongoDB (그냥 설치)
 pip install fastapi uvicorn (다운받기)
 python -m uvicorn main:app --reload --port 8000 (서버 실행)
 
+-- powershell 기준
+env:GEMINI_API_KEY="AIzaSyDzvveN2HAG9RAI5UcShIrWNvr2mInOufs"
+
+-- cmd기준
+set GEMINI_API_KEY=AIzaSyDzvveN2HAG9RAI5UcShIrWNvr2mInOufs
+
 2. Redis
 npm install redis
 
