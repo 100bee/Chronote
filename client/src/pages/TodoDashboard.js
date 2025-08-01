@@ -1,17 +1,19 @@
 // src/pages/TodoDashboard.js
+// ✅ 오늘의 할 일을 보여주는 투두 대시보드 페이지
 
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import AddTaskInput from '../components/AddTaskInput';
-import TaskList from '../components/TaskList';
-import TodoHeader from '../components/TodoHeader';
+import AddTaskInput from '../components/AddTaskInput'; // 입력창 컴포넌트
+import TaskList from '../components/TaskList'; // 할 일 목록 컴포넌트
+import TodoHeader from '../components/TodoHeader'; // 상단 제목 영역
 import '../css/addtaskinput.scss';
 import '../css/dashboard.scss';
 
 const TodoDashboard = () => {
-  const [todos, setTodos] = useState([]);
-  const [selectedList, setSelectedList] = useState('오늘 할 일');
+  const [todos, setTodos] = useState([]);                  // 할 일 목록
+  const [selectedList, setSelectedList] = useState('오늘 할 일'); // 선택된 탭 (추후 확장 가능)
 
+  // ✅ 토큰 설정
   const token = localStorage.getItem('token');
   const authHeader = {
     headers: {
@@ -19,14 +21,13 @@ const TodoDashboard = () => {
     },
   };
 
-  // ✅ 오늘 날짜 (YYYY-MM-DD)
+  // ✅ 오늘 날짜 (형식: YYYY-MM-DD)
   const today = new Date();
   const todayKey = today.toISOString().split('T')[0];
 
-  // ✅ 오늘 할 일만 서버에서 받아오기
+  // ✅ 오늘 날짜의 할 일 목록 불러오기
   const fetchTodos = useCallback(async () => {
     try {
-      // 서버에 오늘 날짜만 쿼리
       const response = await axios.get(
         `http://localhost:3001/api/todos?date=${todayKey}`,
         authHeader
@@ -37,57 +38,56 @@ const TodoDashboard = () => {
     }
   }, [token, todayKey]);
 
+  // ✅ 페이지 렌더 시 할 일 로드
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
 
-  // ✅ 완료 토글 처리 (서버 라우터에 맞게 수정 필요시 반영)
+  // ✅ 할 일 완료 여부 토글
   const handleToggle = async (id, is_completed) => {
     try {
       const response = await axios.put(
         `http://localhost:3001/api/todos/${id}`,
-        { is_completed: !is_completed },
+        { is_completed: !is_completed }, // 완료 여부 반전
         authHeader
       );
+      // 상태 업데이트 (해당 id만 반영)
       setTodos(todos.map(todo => (todo.id === id ? response.data : todo)));
     } catch (error) {
       console.error('Error updating todo:', error);
     }
   };
 
-  // ✅ 삭제 처리
+  // ✅ 할 일 삭제
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3001/api/todos/${id}`, authHeader);
+      // 삭제된 항목 제외하고 상태 업데이트
       setTodos(todos.filter(todo => todo.id !== id));
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
 
-  // ✅ 새로운 작업 추가 (오늘 날짜로 저장)
+  // ✅ 새 할 일 추가 (날짜는 오늘 기준)
   const handleAddTask = async (newTaskContent) => {
+    if (!newTaskContent.trim()) return;
     try {
-      const dateString = todayKey; // 'YYYY-MM-DD'만 전달
-      console.log('[📩 새 작업 추가 요청]', newTaskContent);
-
       const response = await axios.post(
         'http://localhost:3001/api/todos',
         {
           content: newTaskContent,
-          date: dateString,
+          date: todayKey,
         },
         authHeader
       );
-
-      console.log('[✅ 추가 완료]', response.data);
-      setTodos(prev => [...prev, response.data]);
+      setTodos(prev => [...prev, response.data]); // 새 항목 추가
     } catch (error) {
       console.error('Error adding task:', error.response?.data || error);
     }
   };
 
-  // ✅ 새로고침용 (오늘만)
+  // ✅ 강제 새로고침 (오늘 날짜 기준)
   const refreshTodos = async () => {
     try {
       const response = await axios.get(
@@ -103,7 +103,12 @@ const TodoDashboard = () => {
   return (
     <div className="main-area">
       <TodoHeader selected={selectedList} />
-      <TaskList todos={todos} refreshTodos={refreshTodos} />
+      <TaskList
+        todos={todos}
+        refreshTodos={refreshTodos}
+        onToggle={handleToggle}
+        onDelete={handleDelete}
+      />
       <AddTaskInput onAdd={handleAddTask} />
     </div>
   );

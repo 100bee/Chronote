@@ -87,3 +87,9 @@ ON DUPLICATE KEY UPDATE
   nickname = VALUES(nickname),
   score = VALUES(score),
   tier = VALUES(tier);
+
+# todo 테이블에 user_id 외래 키 추가
+ALTER TABLE todo
+  ADD CONSTRAINT fk_user
+  FOREIGN KEY (user_id) REFERENCES user_info(id)
+  ON DELETE CASCADE;

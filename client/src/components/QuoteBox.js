@@ -1,6 +1,10 @@
-import { useEffect, useState } from 'react';
-import '../css/quotebox.scss';
+// client/src/components/QuoteBox.js
+// 💬 동기부여 명언을 30초마다 무작위로 보여주는 컴포넌트
 
+import { useEffect, useState } from 'react';
+import '../css/quotebox.scss'; // QuoteBox 스타일
+
+// 동기부여 명언 모음
 const quotes = [
   "늦게 시작하는 것을 두려워 말고, 하다 중단하는 것을 두려워하라.",
   "10분 뒤와 10년 후를 동시에 생각하라.",
@@ -42,27 +46,29 @@ const quotes = [
   "고뇌에 지는 것은 수치가 아니다. 쾌락에 지는 것이야말로 수치다."
 ];
 
-
 const QuoteBox = () => {
-  const [quote, setQuote] = useState("");
+  const [quote, setQuote] = useState(""); // 현재 보여줄 명언 상태
 
   useEffect(() => {
+    // 랜덤 명언 선택 함수
     const getRandomQuote = () => {
       const random = Math.floor(Math.random() * quotes.length);
       return quotes[random];
     };
 
-    setQuote(getRandomQuote());
+    setQuote(getRandomQuote()); // 초기 명언 설정
 
+    // ⏱️ 30초마다 새로운 명언으로 갱신
     const interval = setInterval(() => {
       setQuote(getRandomQuote());
-    }, 30000); // 30초마다 변경
+    }, 30000);
 
+    // 컴포넌트 언마운트 시 인터벌 정리
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="quote-box">
+    <div className="quote-box"> {/* 명언을 보여주는 상자 */}
       <p>{quote}</p>
     </div>
   );
