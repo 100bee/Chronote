@@ -19,7 +19,6 @@ function verifyToken(req, res, next) {
     next();
   } catch (err) {
     console.error('❌ JWT 검증 실패:', err.message);
-    console.error('📦 process.env.JWT_SECRET:', process.env.JWT_SECRET); // 추가 로그
     return res.status(403).json({ message: '유효하지 않은 토큰입니다.' });
   }
 }

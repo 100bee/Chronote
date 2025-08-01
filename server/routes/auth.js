@@ -1,4 +1,3 @@
-// server/routes/auth.js
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -10,15 +9,19 @@ router.post('/signup', async (req, res) => {
   const { email, password, nickname } = req.body;
 
   try {
-    const [existing] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    // ✅ 중복 확인
+    const [existing] = await db.execute('SELECT * FROM user_info WHERE user_id = ?', [email]);
     if (existing.length > 0) {
       return res.status(400).json({ message: '이미 존재하는 이메일입니다.' });
     }
+
+    // ✅ 비밀번호 해싱
     const hashedPassword = await bcrypt.hash(password, 10);
     const nicknameToUse = nickname || '익명';
 
+    // ✅ user_info에 INSERT
     await db.execute(
-      'INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)',
+      'INSERT INTO user_info (user_id, password, nickname) VALUES (?, ?, ?)',
       [email, hashedPassword, nicknameToUse]
     );
 
@@ -34,28 +37,29 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-
+    // ✅ user_info에서 사용자 조회
+    const [rows] = await db.execute('SELECT * FROM user_info WHERE user_id = ?', [email]);
     if (rows.length === 0) {
       return res.status(401).json({ message: '사용자를 찾을 수 없습니다.' });
     }
 
     const user = rows[0];
-    const isMatch = await bcrypt.compare(password, user.password);
 
+    // ✅ 비밀번호 확인
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
     }
 
-    // ✅ JWT 발급 (7일로 늘림)
+    // ✅ JWT 발급 (user_info의 id, user_id, nickname 포함)
     const token = jwt.sign(
       {
-        id: user.id,
-        email: user.email,
-        nickname: user.nickname
+        id: user.id,               // 숫자형 PK
+        user_id: user.user_id,     // 로그인용 아이디 (이메일)
+        nickname: user.nickname    // 닉네임
       },
       process.env.JWT_SECRET,
-      { expiresIn: '7d' } // <-- 7일로 만료 연장
+      { expiresIn: '7d' }
     );
 
     res.json({ token });

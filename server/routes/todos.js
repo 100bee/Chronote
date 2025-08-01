@@ -1,9 +1,8 @@
-// server/routes/todos.js
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const verifyToken = require('../middleware/verifyToken');
-const updateScoreAndTier = require('../utils/updateScoreAndTier'); // ✅ 추가
+const updateScoreAndTier = require('../utils/updateScoreAndTier'); // ✅ 점수 로직
 
 // ✅ GET /api/todos - 날짜별 투두 리스트 가져오기 (필터 추가)
 router.get('/', verifyToken, async (req, res) => {
@@ -31,7 +30,7 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-// ✅ POST /api/todos
+// ✅ POST /api/todos - 할 일 추가
 router.post('/', verifyToken, async (req, res) => {
   const { content, date } = req.body;
   const userId = req.user?.id;
@@ -87,7 +86,7 @@ router.patch('/:id/start', verifyToken, async (req, res) => {
   }
 });
 
-// ✅ PATCH /api/todos/:id/complete - 완료 처리 및 종료 시간+duration 기록 + 점수/티어/로그 기록
+// ✅ PATCH /api/todos/:id/complete - 완료 + 종료 시간 + duration + 점수 갱신
 router.patch('/:id/complete', verifyToken, async (req, res) => {
   const todoId = req.params.id;
   const userId = req.user?.id;
@@ -103,8 +102,8 @@ router.patch('/:id/complete', verifyToken, async (req, res) => {
       [duration ?? 0, todoId, userId]
     );
 
-    // ✅ 여기서 점수/티어 동시 갱신!
-    await updateScoreAndTier(userId, 10, '할일 완료'); // 점수/사유는 정책에 맞게 조정
+    // ✅ 숫자형 userId만 전달
+    await updateScoreAndTier(userId, 10, '할일 완료');
 
     res.json({ message: '완료 처리 및 종료 시간 기록 완료' });
   } catch (err) {

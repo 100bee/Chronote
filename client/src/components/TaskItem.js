@@ -1,5 +1,6 @@
+// src/components/TaskItem.js
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
   const [isStarted, setIsStarted] = useState(false);
@@ -17,6 +18,28 @@ const TaskItem = ({ todo, refreshTodos, onToggle, onDelete }) => {
       Authorization: `Bearer ${token}`,
     },
   };
+
+  // ✅ 시작 상태 복원 (페이지 이동/새로고침 대비)
+  useEffect(() => {
+    if (todo.is_started && todo.start_time && !todo.is_completed) {
+      const parsedTime = new Date(todo.start_time).getTime();
+      setIsStarted(true);
+      setStartTime(parsedTime);
+    }
+  }, [todo.is_started, todo.start_time, todo.is_completed]);
+
+  // ✅ 타이머 매초 갱신
+  useEffect(() => {
+    let timer;
+    if (isStarted && startTime && !isPaused && !isCompleted) {
+      timer = setInterval(() => {
+        const now = Date.now();
+        setElapsedTime(prev => prev + Math.floor((now - startTime) / 1000));
+        setStartTime(now); // 기준 시각 업데이트
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isStarted, startTime, isPaused, isCompleted]);
 
   // ✅ 타이머 시작
   const handleStart = async () => {
