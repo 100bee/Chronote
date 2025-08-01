@@ -113,15 +113,23 @@ MongoDB (그냥 설치)
 
 설치 라이브러리
 1. 파이썬 환경
-.\venv\Scripts\activate (가상환경키기)
-pip install fastapi uvicorn (다운받기)
-python -m uvicorn main:app --reload --port 8000 (서버 실행)
-
+가상환경 키기전에 
 -- powershell 기준
 env:GEMINI_API_KEY="AIzaSyDzvveN2HAG9RAI5UcShIrWNvr2mInOufs"
 
 -- cmd기준
 set GEMINI_API_KEY=AIzaSyDzvveN2HAG9RAI5UcShIrWNvr2mInOufs
+
+.\venv\Scripts\activate (가상환경키기)
+pip install fastapi uvicorn (다운받기)
+pip install -r -requirements.txt
+cd pyserver (pyserver에서 pymongo 설치)
+pip install pymongo
+pip install python-jose
+
+
+python -m uvicorn main:app --reload --port 8000 (서버 실행)
+
 
 2. Redis
 npm install redis

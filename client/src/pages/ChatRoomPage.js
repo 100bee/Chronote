@@ -1,80 +1,95 @@
-// src/pages/ChatRoomPage.js
-// ✅ 실시간 채팅방 페이지: socket.io를 통해 특정 roomId에 입장하여 채팅 주고받기
-
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import '../css/chatroom.scss'; // 채팅방 스타일
+import '../css/chatroom.scss';
 
-// ✅ 서버에 연결된 소켓 클라이언트 생성
 const socket = io("http://localhost:3001");
 
 const ChatRoomPage = () => {
-  const { roomId } = useParams();              // URL 파라미터에서 roomId 추출
-  const [messages, setMessages] = useState([]); // 채팅 메시지 배열
-  const [input, setInput] = useState('');       // 입력창 내용
-  const messagesEndRef = useRef(null);          // 자동 스크롤용 ref
+  const { roomId } = useParams();
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef(null);
+  const nickname = localStorage.getItem("nickname");
 
-  // ✅ 방 입장 및 새 메시지 수신 처리
+  // ✅ 방 입장 및 소켓 리스너 설정
   useEffect(() => {
-    socket.emit('joinRoom', roomId); // 서버에 방 참가 요청
+    socket.emit('joinRoom', roomId);
 
-    // 서버로부터 새로운 메시지 수신 시 처리
     socket.on('newMessage', (msg) => {
-      setMessages(prev => [...prev, msg]); // 메시지 추가
+      setMessages(prev => [...prev, msg]);
     });
 
-    // 언마운트 시 리스너 정리
     return () => {
       socket.off('newMessage');
     };
   }, [roomId]);
 
-  // ✅ 새로운 메시지가 추가될 때 스크롤을 아래로 자동 이동
+  // ✅ 채팅창 자동 스크롤
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   // ✅ 메시지 전송
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (input.trim() === '') return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
 
     const newMsg = {
       roomId,
-      sender: '사용자',   // 추후 실제 로그인 사용자 이름으로 대체 가능
-      message: input
+      message: input,
     };
 
-    socket.emit('chatMessage', newMsg); // 서버로 메시지 전송
-    setMessages(prev => [...prev, newMsg]); // 로컬 메시지 추가
-    setInput(''); // 입력창 초기화
+    // ✅ 실시간 전송 (프론트에는 임시로 '나' 표시)
+    socket.emit('chatMessage', {
+      ...newMsg,
+      sender: nickname || '나',
+    });
+
+    setMessages(prev => [...prev, { ...newMsg, sender: nickname || '나' }]);
+
+    // ✅ FastAPI 서버에 JWT 인증 포함 메시지 저장
+    try {
+      await axios.post('http://localhost:8000/messages', newMsg, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+    } catch (err) {
+      console.error('📛 FastAPI 메시지 저장 실패:', err);
+    }
+
+    setInput('');
   };
 
   return (
     <div className="chatroom-container">
-      {/* ✅ 채팅방 상단: 방 번호 표시 */}
       <div className="chatroom-header">🗨️ 채팅방 코드: {roomId}</div>
 
-      {/* ✅ 채팅 메시지 영역 */}
       <div className="chatroom-messages">
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`chat-bubble ${msg.sender === '사용자' ? 'own' : 'other'}`} // 내가 보낸 메시지는 오른쪽
+            className={`chat-bubble ${msg.sender === nickname ? 'own' : 'other'}`}
           >
             <strong>{msg.sender}</strong>: {msg.message}
           </div>
         ))}
-        <div ref={messagesEndRef} /> {/* 스크롤 anchor */}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* ✅ 입력창 + 전송 버튼 */}
       <div className="chatroom-input">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && sendMessage()} // 엔터 입력 처리
+          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
           placeholder="메시지를 입력하세요..."
         />
         <button onClick={sendMessage}>전송</button>
