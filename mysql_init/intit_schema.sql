@@ -1,6 +1,6 @@
 -- ✅ 데이터베이스 생성 및 선택
-CREATE DATABASE IF NOT EXISTS chronote;
-USE chronote;
+CREATE DATABASE IF NOT EXISTS chronote_db;
+USE chronote_db;
 
 -- ✅ user_info: 사용자 정보 테이블
 CREATE TABLE IF NOT EXISTS user_info (
