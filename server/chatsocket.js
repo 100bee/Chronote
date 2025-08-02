@@ -1,5 +1,4 @@
 // server/chatsocket.js
-
 const Message = require('./models/Message');
 const ChatRoom = require('./models/ChatRoom');
 const redis = require('./redis');
@@ -16,8 +15,8 @@ module.exports = (io) => {
     socket.on('joinRoom', async (roomId) => {
       try {
         socket.join(roomId);
-        // Redis에서 최근 50개 메시지 가져오기
-        const cachedMsgs = await redis.lrange(`room:${roomId}:messages`, -50, -1);
+        // Redis에서 최근 50개 메시지 가져오기 (camelCase: lRange)
+        const cachedMsgs = await redis.lRange(`room:${roomId}:messages`, -50, -1);
         let messages = cachedMsgs.map(JSON.parse);
 
         if (messages.length === 0) {
@@ -26,7 +25,7 @@ module.exports = (io) => {
           // 최신순으로 들어오기 때문에 reverse() 필요
           messages = messages.reverse();
           for (const msg of messages) {
-            await redis.rpush(`room:${roomId}:messages`, JSON.stringify(msg));
+            await redis.rPush(`room:${roomId}:messages`, JSON.stringify(msg));
           }
         }
 
@@ -45,9 +44,9 @@ module.exports = (io) => {
         // 1. MongoDB 저장
         const savedMsg = await Message.create(msgObj);
 
-        // 2. Redis에 push (최신 100개 유지)
-        await redis.rpush(`room:${roomId}:messages`, JSON.stringify(savedMsg));
-        await redis.ltrim(`room:${roomId}:messages`, -100, -1);
+        // 2. Redis에 push (최신 100개 유지) (camelCase: rPush, lTrim)
+        await redis.rPush(`room:${roomId}:messages`, JSON.stringify(savedMsg));
+        await redis.lTrim(`room:${roomId}:messages`, -100, -1);
 
         // 3. 같은 방의 모든 유저에게 메시지 브로드캐스트
         io.to(roomId).emit('newMessage', savedMsg);

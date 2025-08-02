@@ -1,3 +1,4 @@
+// client/src/pages/ChatRoomPage.js
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -77,14 +78,13 @@ const ChatRoomPage = () => {
     const newMsg = {
       roomId,
       message: input,
+      sender: nickname || '나', // ✅ 서버로도 닉네임 포함 전송
     };
 
-    socket.emit('chatMessage', {
-      ...newMsg,
-      sender: nickname || '나',
-    });
+    // ✅ 이벤트명 반드시 맞추기!
+    socket.emit('sendMessage', newMsg);
 
-    setMessages(prev => [...prev, { ...newMsg, sender: nickname || '나' }]);
+    // (setMessages 직접 추가 X: 서버 broadcast로 동기화!)
 
     try {
       await axios.post('http://localhost:8000/messages', newMsg, {
