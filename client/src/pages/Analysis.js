@@ -29,21 +29,27 @@ const Analysis = () => {
   }, [todayKey]);
 
   return (
-    <div style={{ padding: '20px', color: 'white' }}>
+    <div style={{ padding: '20px', color: 'white', minHeight: '100vh' }}>
       <h1>분석 페이지</h1>
 
       {/* ✅ 도넛 차트 + 막대 차트 나란히 배치 */}
-      <div style={{ display: 'flex', gap: '40px', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', gap: '40px', justifyContent: 'center', alignItems: 'flex-start' }}>
         {/* 도넛 차트 영역 */}
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 300 }}>
           <h2>도넛 차트</h2>
-          <TodoDonutChart todos={todos} /> {/* 과목별 비율 시각화 */}
+          {/* ✅ 반드시 고정 height를 가진 div로 감싸기 */}
+          <div style={{ width: '100%', height: 300, minWidth: 250 }}>
+            <TodoDonutChart todos={todos} /> {/* 과목별 비율 시각화 */}
+          </div>
         </div>
 
         {/* 막대 차트 영역 */}
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 300 }}>
           <h2>막대 그래프</h2>
-          <TodoBarChart todos={todos} /> {/* 과목별 시간량 시각화 */}
+          {/* ✅ 반드시 고정 height를 가진 div로 감싸기 */}
+          <div style={{ width: '100%', height: 300, minWidth: 250 }}>
+            <TodoBarChart todos={todos} /> {/* 과목별 시간량 시각화 */}
+          </div>
         </div>
       </div>
     </div>

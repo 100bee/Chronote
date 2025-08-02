@@ -1,61 +1,58 @@
 // client/src/components/TodoDonutChart.js
-// ✅ 과목별 공부 시간 분포를 도넛 차트로 시각화하는 컴포넌트
-
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
 
-// ✅ 과목별 색상 팔레트
 const COLORS = ['#FF8042', '#0088FE', '#00C49F', '#FFBB28', '#AA00FF'];
 
 // ✅ todos 배열로부터 과목별 공부 시간(분 단위) 계산
 function getChartData(todos) {
   const subjectDuration = {};
-
   todos.forEach(todo => {
-    if (todo.duration && todo.content) {
+    // ✅ duration이 0일 수도 있으므로 숫자 타입 검사
+    if (
+      todo &&
+      typeof todo === 'object' &&
+      typeof todo.content === 'string' &&
+      typeof todo.duration === 'number'
+    ) {
       subjectDuration[todo.content] = (subjectDuration[todo.content] || 0) + todo.duration;
     }
   });
-
-  // 결과 형식: [{ name: '과목명', value: 분단위 시간 }, ...]
   return Object.entries(subjectDuration).map(([name, value]) => ({
     name,
-    value: Math.floor(value / 60),
+    value: Math.floor(value / 60), // 분 단위
   }));
 }
 
 const TodoDonutChart = ({ todos }) => {
-  const data = getChartData(todos); // 가공된 차트 데이터
+  const data = getChartData(todos);
 
   return (
-    <PieChart width={350} height={300}> {/* 전체 도넛 차트 영역 */}
+    <PieChart width={350} height={300}>
       <Pie
-        data={data}             // 차트 데이터
-        cx="50%"                // 중심 x좌표
-        cy="50%"                // 중심 y좌표
-        outerRadius={100}       // 도넛 반지름
-        dataKey="value"         // 표시할 값 키
-        labelLine={false}       // 라벨 라인 제거
-        label={({ name, percent }) => ( // 라벨 내용: 과목명 + 비율
-          <tspan style={{ fill: '#232323', fontWeight: 700 }}>
-            {`${name} ${(percent * 100).toFixed(0)}%`}
-          </tspan>
-        )}
+        data={data}
+        cx="50%"
+        cy="50%"
+        outerRadius={100}
+        dataKey="value"
+        labelLine={false}
+        // ✅ 오류 방지를 위해 문자열 반환으로 변경
+        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
       >
-        {/* 과목별 색상 지정 */}
+        {/* ✅ 과목별 색상 적용 */}
         {data.map((entry, idx) => (
           <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
         ))}
       </Pie>
 
-      {/* 마우스 오버 툴팁 */}
+      {/* ✅ 툴팁: 스타일을 SVG 호환 방식으로 수정 */}
       <Tooltip
-        contentStyle={{ color: '#232323', fontWeight: 600 }}
-        labelStyle={{ color: '#232323', fontWeight: 600 }}
-        itemStyle={{ color: '#232323', fontWeight: 600 }}
+        contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc' }}
+        labelStyle={{ fontSize: 12 }}
+        itemStyle={{ fontSize: 12 }}
       />
 
-      {/* 범례 */}
-      <Legend wrapperStyle={{ color: '#232323', fontWeight: 600 }} />
+      {/* ✅ 범례: 간단한 wrapperStyle만 적용 */}
+      <Legend wrapperStyle={{ fontSize: 12 }} />
     </PieChart>
   );
 };

@@ -14,7 +14,13 @@ function getChartData(todos) {
   const subjectDuration = {}; // 과목별 누적 시간 저장 객체
 
   todos.forEach(todo => {
-    if (todo.duration && todo.content) {
+    // ✅ duration이 0인 경우도 허용하도록 조건 수정
+    if (
+      todo &&
+      typeof todo === 'object' &&
+      typeof todo.content === 'string' &&
+      typeof todo.duration === 'number'
+    ) {
       subjectDuration[todo.content] = (subjectDuration[todo.content] || 0) + todo.duration;
     }
   });
@@ -29,47 +35,59 @@ function getChartData(todos) {
 const TodoBarChart = ({ todos }) => {
   const data = getChartData(todos); // 과목별 데이터 추출
 
+  // ✅ ResponsiveContainer가 부모 크기를 못 읽는 걸 방지: 데이터가 없으면 아예 렌더링하지 않음
+  if (!data || data.length === 0) {
+    return <p style={{ color: '#aaa' }}>표시할 데이터가 없습니다.</p>;
+  }
+
+  // ✅ 반드시 상위에서 width, height가 0이 아닌 값으로 지정되어 있어야 함!
   return (
-    <ResponsiveContainer width="100%" height={300}> {/* 반응형 컨테이너 */}
-      <BarChart data={data}>
-        {/* ✅ X축: 과목명 */}
-        <XAxis
-          dataKey="name"
-          tick={{ fill: '#232323', fontWeight: 600 }}
-        />
-        
-        {/* ✅ Y축: 공부 시간 (단위: 분) */}
-        <YAxis
-          unit="분"
-          tick={{ fill: '#232323', fontWeight: 600 }}
-          label={{
-            value: '분', angle: -90, position: 'insideLeft',
-            fill: '#232323', fontWeight: 600
-          }}
-        />
+    <div style={{ width: '100%', height: 300 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data}>
+          {/* ✅ X축: 과목명 */}
+          <XAxis
+            dataKey="name"
+            tick={{ fill: '#232323', fontWeight: 600 }}
+          />
+          
+          {/* ✅ Y축: 공부 시간 (단위: 분) */}
+          <YAxis
+            unit="분"
+            tick={{ fill: '#232323', fontWeight: 600 }}
+            label={{
+              value: '분', angle: -90, position: 'insideLeft',
+              fill: '#232323', fontWeight: 600
+            }}
+          />
 
-        {/* ✅ 툴팁: 마우스 오버 시 정보 표시 */}
-        <Tooltip
-          contentStyle={{ color: '#232323', fontWeight: 600 }}
-          labelStyle={{ color: '#232323', fontWeight: 600 }}
-          itemStyle={{ color: '#232323', fontWeight: 600 }}
-        />
+          {/* ✅ 툴팁: 마우스 오버 시 정보 표시 */}
+          <Tooltip
+            contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc' }}
+            labelStyle={{ fontSize: 12 }}
+            itemStyle={{ fontSize: 12 }}
+          />
 
-        {/* ✅ 범례 (Legend) */}
-        <Legend wrapperStyle={{ color: '#232323', fontWeight: 600 }} />
+          {/* ✅ 범례 (Legend) */}
+          <Legend wrapperStyle={{ fontSize: 12 }} />
 
-        {/* ✅ 막대 그래프 본체 */}
-        <Bar dataKey="value" name="공부시간(분)">
-          {/* 막대 위에 값 표시 */}
-          <LabelList dataKey="value" position="top" fill="#232323" fontWeight={700} />
+          {/* ✅ 막대 그래프 본체 */}
+          <Bar dataKey="value" name="공부시간(분)">
+            {/* ✅ 막대 위에 값 표시 (style로 안전하게 적용) */}
+            <LabelList
+              dataKey="value"
+              position="top"
+              style={{ fill: '#232323', fontWeight: 700 }}
+            />
 
-          {/* 막대 색상 개별 지정 */}
-          {data.map((entry, idx) => (
-            <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-          ))}
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+            {/* ✅ 막대 색상 개별 지정 */}
+            {data.map((entry, idx) => (
+              <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 
