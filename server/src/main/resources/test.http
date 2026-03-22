@@ -39,3 +39,15 @@ GET http://localhost:8080/api/rank
 ### 내 정보
 GET http://localhost:8080/api/rank/userinfo
 Authorization: Bearer {{token}}
+
+### 출석 체크
+POST http://localhost:8080/api/attendance
+Authorization: Bearer {{token}}
+
+### 출석 현황 조회
+GET http://localhost:8080/api/attendance
+Authorization: Bearer {{token}}
+
+### 이번 달 출석 조회
+GET http://localhost:8080/api/attendance/monthly
+Authorization: Bearer {{token}}
