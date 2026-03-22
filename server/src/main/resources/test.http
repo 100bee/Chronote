@@ -8,7 +8,7 @@ Content-Type: application/json
   "nickname": "테스터"
 }
 
-### 로그인
+### 로그인 (먼저 실행하면 토큰 자동 저장!)
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
@@ -17,10 +17,12 @@ Content-Type: application/json
   "password": "1234"
 }
 
+> {% client.global.set("token", response.body.token); %}
+
 ### 할 일 추가
 POST http://localhost:8080/api/todos
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJpZCI6MSwidXNlcl9pZCI6InRlc3RAdGVzdC5jb20iLCJuaWNrbmFtZSI6Iu2FjOyKpO2EsCIsImlhdCI6MTc3NDE2Nzk2NCwiZXhwIjoxNzc0MjU0MzY0fQ.R9h_7ZZ7HoYGLYFDeF4blr6HM5seeLB2T63Neq95yH7R1tg_t-iTLueWe1IZlcC1
+Authorization: Bearer {{token}}
 
 {
   "content": "스프링 공부하기",
@@ -29,4 +31,11 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJpZCI6MSwidXNlcl9pZCI6InRlc3RAdGVzd
 
 ### 할 일 조회
 GET http://localhost:8080/api/todos?date=2026-03-22
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJpZCI6MSwidXNlcl9pZCI6InRlc3RAdGVzdC5jb20iLCJuaWNrbmFtZSI6Iu2FjOyKpO2EsCIsImlhdCI6MTc3NDE2Nzk2NCwiZXhwIjoxNzc0MjU0MzY0fQ.R9h_7ZZ7HoYGLYFDeF4blr6HM5seeLB2T63Neq95yH7R1tg_t-iTLueWe1IZlcC1
+Authorization: Bearer {{token}}
+
+### 전체 랭킹
+GET http://localhost:8080/api/rank
+
+### 내 정보
+GET http://localhost:8080/api/rank/userinfo
+Authorization: Bearer {{token}}
