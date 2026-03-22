@@ -1,132 +1,138 @@
-/* client/src/css/rankPage.scss */
+// 📁 src/css/rankPage.scss
+@import './_utils.scss';
+
 .rank-page {
   display: flex;
-  justify-content: space-between;
-  padding: 40px;
-  gap: 40px;
-  background-color: #f8f9fa;
-  min-height: 100vh;
+  gap: 24px;
+  padding: 32px 40px;
+  min-height: calc(100vh - 64px);
+  background: $bg-light;
   box-sizing: border-box;
-}
-
-/* ✅ 다크모드 배경 */
-.darkmode .rank-page {
-  background-color: #1a1a1f;
 }
 
 .rank-left-box,
 .rank-right-box {
   flex: 1;
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 24px 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  @include card;
+  padding: 28px 32px;
+
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid $border-light;
+  }
 }
 
 .rank-left-box {
-  border-left: 5px solid #ffa94d;
+  max-width: 440px;
+  border-top: 4px solid $orange;
 }
 
 .rank-right-box {
-  border-left: 5px solid #4dabf7;
+  border-top: 4px solid #0ea5e9;
 }
 
-/* ✅ 다크모드 박스 스타일 */
-.darkmode .rank-left-box,
-.darkmode .rank-right-box {
-  background-color: #26262c;
-  color: #e8e8e8;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  border-left-color: #ffb347; // 다크모드용 오렌지
-}
-
-.darkmode .rank-right-box {
-  border-left-color: #6ec5ff; // 다크모드용 블루
-}
-
-h2 {
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 20px;
-  color: #343a40;
+
+  p {
+    font-size: 0.95rem;
+    color: $text-secondary;
+    margin: 0;
+    strong { color: $text-primary; }
+  }
 }
 
-/* ✅ 다크모드 제목 색상 */
-.darkmode h2 {
-  color: #ffffff;
-}
+.tier-bar-wrap {
+  margin: 16px 0;
 
-.user-info p,
-.next-rank li,
-.ranking-list li {
-  margin-bottom: 10px;
-  font-size: 16px;
-  color: #495057;
-}
+  .tier-bar-bg {
+    height: 8px;
+    background: $border-light;
+    border-radius: 99px;
+    overflow: hidden;
 
-/* ✅ 다크모드 텍스트 */
-.darkmode .user-info p,
-.darkmode .next-rank li,
-.darkmode .ranking-list li {
-  color: #dddddd;
-}
+    .tier-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, $orange, $orange-dark);
+      border-radius: 99px;
+      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+  }
 
-hr {
-  margin: 20px 0;
-  border: none;
-  border-top: 1px solid #dee2e6;
-}
-
-/* ✅ 다크모드 구분선 */
-.darkmode hr {
-  border-top: 1px solid #444;
-}
-
-.next-rank ul {
-  padding-left: 20px;
+  .tier-bar-label {
+    font-size: 12px;
+    color: $text-muted;
+    margin-top: 6px;
+    text-align: right;
+  }
 }
 
 .ranking-list {
-  list-style-position: inside;
-  padding-left: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: $radius-sm;
+    background: $bg-light;
+    font-size: 0.9rem;
+    color: $text-secondary;
+    transition: $transition;
+
+    .rank-num {
+      font-weight: 700;
+      color: $text-muted;
+      min-width: 28px;
+      font-size: 0.85rem;
+    }
+
+    &:nth-child(1) .rank-num { color: #f59e0b; }
+    &:nth-child(2) .rank-num { color: #9ca3af; }
+    &:nth-child(3) .rank-num { color: #cd7f32; }
+
+    &:hover { background: $orange-glow; }
+  }
 }
 
-/* -------------------------- */
-/* 🏅 랭크별 닉네임 스타일 */
-/* -------------------------- */
-
-.nickname {
-  font-weight: bold;
-  font-size: 18px;
-  -webkit-text-stroke: 0.6px black;
+.next-rank {
+  h3 { font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; color: $text-primary; }
+  ul { padding-left: 18px; margin: 0;
+    li { font-size: 0.9rem; color: $text-secondary; margin-bottom: 6px; } }
 }
 
-/* ✅ 랭크별 색상 및 외곽선 */
-.bronze {
-  color: #cd7f32;
-  -webkit-text-stroke: 0.6px #6e4f27;
-}
+hr { border: none; border-top: 1px solid $border-light; margin: 20px 0; }
 
-.silver {
-  color: #c0c0c0;
-  -webkit-text-stroke: 0.6px #808080;
-}
+// 티어 색상
+.nickname { font-weight: 700; }
+.브론즈, .bronze  { color: #cd7f32; }
+.실버, .silver    { color: #94a3b8; }
+.골드, .gold      { color: #f59e0b; }
+.플래티넘, .platinum { color: #22d3ee; }
+.다이아, .diamond { color: #a78bfa; }
+.마스터, .master  { color: #f97316; }
 
-.gold {
-  color: #ffd700;
-  -webkit-text-stroke: 0.6px #b8860b;
+.darkmode .rank-page { background: $bg-dark; }
+.darkmode .rank-left-box,
+.darkmode .rank-right-box {
+  @include card-dark;
+  h2 { color: $text-dark; border-bottom-color: $border-dark; }
 }
-
-.platinum {
-  color: #00bfff;
-  -webkit-text-stroke: 0.6px #1e90ff;
-}
-
-.diamond {
-  color: #00ffff;
-  -webkit-text-stroke: 0.6px #008b8b;
-}
-
-/* ✅ 다크모드용 외곽선 대비 */
-.darkmode .nickname {
-  -webkit-text-stroke: 0.6px white;
-}
+.darkmode .user-info p { color: $text-dark2; strong { color: $text-dark; } }
+.darkmode .ranking-list li { background: $surface-dark2; color: $text-dark2; &:hover { background: $orange-glow; } }
+.darkmode hr { border-top-color: $border-dark; }
+.darkmode .next-rank { h3 { color: $text-dark; } li { color: $text-dark2; } }
+.darkmode .tier-bar-wrap .tier-bar-bg { background: $border-dark; }

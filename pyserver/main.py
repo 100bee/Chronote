@@ -11,18 +11,30 @@ from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
 
 from sentence_transformers import SentenceTransformer, util
 from openai import OpenAI
 from pymongo import MongoClient
 from jose import JWTError, jwt
 
+# ✅ .env 로드
+load_dotenv()
+
 # --- 1. 모델 및 API 키 설정 ---
 embedding_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
+
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4.1-mini")
+OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
+
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY 환경 변수가 설정되지 않았습니다.")
-openai_client = OpenAI(api_key=OPENAI_API_KEY)
+
+openai_client = OpenAI(
+    api_key=OPENAI_API_KEY,
+    base_url=OPENAI_BASE_URL
+)
 
 # --- 2. MongoDB 연결 ---
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
@@ -49,7 +61,7 @@ app.add_middleware(
 
 # --- 4. JWT 설정 ---
 SECRET_KEY = os.environ.get("JWT_SECRET", "chronote-secret-key-please-change-this-in-production-256bit")
-ALGORITHM = "HS256"
+ALGORITHM = os.environ.get("JWT_ALGORITHM", "HS384")  # ✅ Spring Boot와 동일한 알고리즘
 
 def get_current_user_id(request: Request) -> str:
     auth_header = request.headers.get("Authorization")
@@ -117,7 +129,7 @@ def get_structured_info_from_gpt(text: str) -> dict:
 """
     try:
         response = openai_client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model=OPENAI_MODEL,
             messages=[{"role": "user", "content": prompt}],
             response_format={"type": "json_object"}
         )

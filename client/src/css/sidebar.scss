@@ -1,38 +1,67 @@
+// 📁 src/css/sidebar.scss
+@import './_utils.scss';
+
 .sidebar {
-  width: 220px;
-  background-color: #1e1e1e;
-  color: white;
-  padding: 20px;
+  width: 240px;
+  background: $surface-light;
+  border-right: 1px solid $border-light;
+  padding: 24px 16px;
   height: 100vh;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  overflow-y: auto;
+  transition: $transition;
 }
 
 .sidebar-title {
-  font-size: 24px;
-  margin-bottom: 30px;
-  color: #ff8c00; // 주황색 강조
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $text-muted;
+  padding: 0 12px;
+  margin-bottom: 8px;
 }
 
 .menu-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 
   .menu-item {
-    padding: 12px 16px;
-    margin-bottom: 8px;
+    padding: 10px 14px;
+    margin-bottom: 2px;
     cursor: pointer;
-    color: #ccc;
-    border-radius: 8px;
-    transition: background-color 0.2s, color 0.2s;
+    color: $text-secondary;
+    border-radius: $radius-sm;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: $transition;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
     &:hover {
-      color: white;
-      background-color: #333;
+      color: $text-primary;
+      background: $bg-light;
     }
 
     &.active {
-      background-color: #ff8c00; // 주황색 강조
-      color: white;
-      font-weight: bold;
+      background: $orange-glow;
+      color: $orange;
+      font-weight: 600;
     }
+  }
+}
+
+.darkmode .sidebar {
+  background: $surface-dark;
+  border-right-color: $border-dark;
+
+  .menu-list .menu-item {
+    color: $text-dark2;
+    &:hover { color: $text-dark; background: $surface-dark2; }
+    &.active { background: $orange-glow; color: $orange; }
   }
 }

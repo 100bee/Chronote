@@ -19,7 +19,7 @@ const TodoList = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/todos?user_id=${userId}`);
+        const response = await axios.get(`http://localhost:8080/api/todos?user_id=${userId}`);
         setTodos(response.data);
       } catch (error) {
         console.error('할 일 불러오기 실패:', error);
@@ -34,7 +34,7 @@ const TodoList = () => {
     if (task.trim() === '') return;
 
     try {
-      const response = await axios.post('http://localhost:3001/api/todos', {
+      const response = await axios.post('http://localhost:8080/api/todos', {
         user_id: userId,
         content: task, // ⚠️ 서버가 'task' 대신 'content'를 요구할 수 있음
       });
@@ -48,7 +48,7 @@ const TodoList = () => {
   // ✅ 완료 여부 토글
   const handleToggleComplete = async (id, is_completed) => {
     try {
-      const response = await axios.put(`http://localhost:3001/api/todos/${id}`, {
+      const response = await axios.put(`http://localhost:8080/api/todos/${id}`, {
         is_completed: !is_completed,
       });
       setTodos(todos.map(todo => (todo.id === id ? response.data : todo)));
@@ -60,7 +60,7 @@ const TodoList = () => {
   // ✅ 작업 삭제
   const handleDeleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/api/todos/${id}`);
+      await axios.delete(`http://localhost:8080/api/todos/${id}`);
       setTodos(todos.filter(todo => todo.id !== id));
     } catch (error) {
       console.error('할 일 삭제 실패:', error);

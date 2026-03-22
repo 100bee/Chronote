@@ -1,94 +1,72 @@
+// 📁 src/css/signup.scss
+@import './_utils.scss';
+
 .signup-wrapper {
-  background-color: #fff;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
+  min-height: 100vh;
+  background: $bg-light;
+  padding: 40px 20px;
 }
 
 .signup-box {
-  width: 400px;
-  padding: 40px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-.logo {
+  width: 480px;
+  padding: 48px 44px;
+  @include card;
   text-align: center;
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 30px;
-  color: #ff8c00;
-}
-
-.signup-form input,
-.signup-form select {
-  display: block;
-  width: 100%;
-  margin-bottom: 15px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-
-  &:focus {
-    border: 1px solid #ff8c00;
-    outline: none;
-  }
-}
-
-.selector {
-  display: flex;
-  gap: 10px;
-}
-
-.submit-btn {
-  width: 100%;
-  background-color: #ff8c00;
-  color: white;
-  padding: 14px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #e67a00;
-  }
-}
-
-/* ✅ 다크모드 대응 스타일 */
-.darkmode .signup-wrapper {
-  background-color: #121212;
-
-  .signup-box {
-    background-color: #1e1e1e;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  }
 
   .logo {
-    color: #ff8c00;
+    font-size: 26px;
+    color: $orange;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 32px;
   }
 
-  .signup-form input,
-  .signup-form select {
-    background-color: #2a2a2a;
-    color: #f0f0f0;
-    border: 1px solid #444;
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
 
-    &:focus {
-      border: 1px solid #ff8c00;
+    input { @include input-base; }
+
+    .selector {
+      display: flex;
+      gap: 10px;
+
+      select {
+        @include input-base;
+        flex: 1;
+        appearance: none;
+        cursor: pointer;
+      }
+    }
+
+    .submit-btn {
+      @include button-primary;
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      margin-top: 8px;
+      border-radius: $radius-md;
     }
   }
 
-  .submit-btn {
-    background-color: #ff8c00;
-    color: white;
+  .links {
+    margin-top: 20px;
+    font-size: 13px;
+    a { color: $orange; text-decoration: none; &:hover { text-decoration: underline; } }
+  }
+}
 
-    &:hover {
-      background-color: #e67a00;
-    }
+.darkmode .signup-wrapper { background: $bg-dark; }
+.darkmode .signup-box {
+  @include card-dark;
+  input, select {
+    background: $surface-dark2;
+    border-color: $border-dark;
+    color: $text-dark;
+    &::placeholder { color: $text-dark2; }
+    &:focus { border-color: $orange; }
   }
 }

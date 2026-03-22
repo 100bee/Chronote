@@ -1,38 +1,40 @@
-// client/src/components/ScoreLog.js
-// ✅ 사용자 점수 변경 로그를 리스트 형태로 보여주는 컴포넌트
-
-import axios from 'axios';
+// 📁 src/components/ScoreLog.js
 import { useEffect, useState } from 'react';
+import api from '../api/index';
 
-function ScoreLog({ userId }) {
-  const [logs, setLogs] = useState([]); // 점수 로그 상태
+function ScoreLog() {
+  const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    // ✅ 서버에서 점수 변경 로그 요청
-    axios.get(`/api/scorelog/${userId}`)
-      .then(res => setLogs(res.data))  // 성공 시 로그 저장
-      .catch(() => setLogs([]));       // 실패 시 빈 배열로 초기화
-  }, [userId]); // userId가 바뀔 때마다 재요청
+    api.get('/api/scorelog')
+      .then(res => setLogs(res.data))
+      .catch(() => setLogs([]));
+  }, []);
+
+  if (logs.length === 0) return null;
 
   return (
-    <div>
-      <h3>최근 점수 변화</h3>
-      <ul>
-        {logs.map((log, idx) => (
-          <li key={idx}>
-            {/* 날짜 표시 (YYYY-MM-DD 형식) */}
-            <span>{log.created_at?.slice(0, 10)}</span>
-
-            {/* 점수 변경 사유 */}
-            <span style={{ marginLeft: 8 }}>{log.reason}</span>
-
-            {/* 점수 증감 (양수는 초록색, 음수는 빨간색으로 표시) */}
-            <span style={{ marginLeft: 8, color: log.score_change > 0 ? 'green' : 'red' }}>
+    <div style={{ marginBottom: 16 }}>
+      <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: 10 }}>최근 점수 변화</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {logs.slice(0, 5).map((log, idx) => (
+          <div key={idx} style={{
+            display: 'flex', justifyContent: 'space-between',
+            alignItems: 'center', padding: '8px 12px',
+            background: 'rgba(249,115,22,0.05)',
+            borderRadius: 8, fontSize: '0.85rem'
+          }}>
+            <span style={{ color: '#78716c' }}>{log.created_at?.slice(0, 10)}</span>
+            <span style={{ color: '#1c1917' }}>{log.reason}</span>
+            <span style={{
+              fontWeight: 700,
+              color: log.score_change > 0 ? '#16a34a' : '#dc2626'
+            }}>
               {log.score_change > 0 ? `+${log.score_change}` : log.score_change}
             </span>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

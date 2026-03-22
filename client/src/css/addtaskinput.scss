@@ -1,47 +1,46 @@
-.add-task-wrapper {
-  display: flex;
-  justify-content: center;
-  padding-top: 20px;
-}
+// 📁 src/css/addtaskinput.scss
+@import './_utils.scss';
 
 .add-task-container {
   display: flex;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.05); // 다크모드 대비
-  border-radius: 12px;
-  padding: 14px 20px;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.2s ease;
+  gap: 12px;
+  background: $surface-light;
+  border: 1.5px solid $border-light;
+  padding: 12px 18px;
+  border-radius: $radius-lg;
+  margin-top: 20px;
+  box-shadow: $shadow-sm;
+  transition: $transition;
+
+  &:hover, &:focus-within {
+    border-color: $orange;
+    box-shadow: 0 0 0 3px $orange-glow;
+  }
+
+  .plus-icon {
+    font-size: 18px;
+    color: $orange;
+    flex-shrink: 0;
+  }
+
+  input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: $text-primary;
+    font-size: 0.95rem;
+    font-family: $font-body;
+    width: 100%;
+
+    &::placeholder { color: $text-muted; }
+  }
 }
 
-.add-task-container:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+.darkmode .add-task-container {
+  background: $surface-dark;
+  border-color: $border-dark;
 
-/* ✅ 기본 라이트 모드용 */
-.plus-icon {
-  font-size: 20px;
-  color: #f97316; // 밝은 배경용 (검정)
-  margin-right: 12px;
-}
-
-/* ✅ 다크모드용 아이콘 색상 */
-body.darkmode .plus-icon {
-  color: #f0a500; // 주황색 계열로 강조
-}
-
-.add-task-container input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  padding: 0;
-  color: #000; // 라이트 모드에서 검정 텍스트
-}
-
-body.darkmode .add-task-container input {
-  color: white;
+  input { color: $text-dark; &::placeholder { color: $text-dark2; } }
+  &:hover, &:focus-within { border-color: $orange; }
 }

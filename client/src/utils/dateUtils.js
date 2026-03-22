@@ -1,11 +1,9 @@
 // src/utils/dateUtils.js
-export function formatDateKorean(dateStr) {
+
+export const getTodayKey = () =>
+  new Date().toISOString().split('T')[0];
+
+export const formatDateKorean = (dateStr) => {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    weekday: 'long',
-  });
-}
-// 데이트가 이상하게 표현되는거 이쁘게 바꿔주는 함수
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+};

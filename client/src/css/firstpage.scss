@@ -1,63 +1,102 @@
+// 📁 src/css/firstpage.scss
+@import './_utils.scss';
+
 .container {
+  @include flex-center;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $bg-light;
+  position: relative;
+  overflow: hidden;
   text-align: center;
-  padding: 60px 20px;
+  padding: 40px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, $orange-glow 0%, transparent 65%);
+    pointer-events: none;
+  }
 }
 
-.logo {  
-  width: 400px;        // 원하는 너비 (예: 100~140px)
-  height: auto;        // 비율 유지
-  margin-bottom: 16px; // 아래 여백 줄이기
-  object-fit: contain; // 이미지 비율 유지
-  display: block;
+.firstpage-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 20px;
+  animation: float 4s ease-in-out infinite;
+  filter: drop-shadow(0 8px 24px rgba(249,115,22,0.3));
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: $text-primary;
+  letter-spacing: -2px;
+  margin: 0 0 12px;
+  position: relative;
+  z-index: 1;
+  span { color: $orange; }
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  color: #444;
-  margin-bottom: 32px;
-}
-
-
-.button-group button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
+  font-size: 1.1rem;
+  color: $text-secondary;
+  margin: 0 0 40px;
+  line-height: 1.7;
+  max-width: 400px;
+  position: relative;
+  z-index: 1;
 }
 
 .button-stack {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-top: 32px;
+  gap: 12px;
+  width: 280px;
+  position: relative;
+  z-index: 1;
 
   button {
-    width: 280px;
-    padding: 16px 0;
-    background-color: #f97316; // 또는 기존 파란색
-    color: #fff;
-    font-weight: bold;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 999px;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: $radius-md;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: $transition;
+    font-family: $font-body;
 
-    &:hover {
-      background-color: #f97316;
+    &:first-child {
+      background: $orange;
+      color: white;
+      border: none;
+      box-shadow: $shadow-orange;
+      &:hover { background: $orange-dark; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(249,115,22,0.35); }
     }
 
-    &:focus {
-      outline: none;
+    &:last-child {
+      background: transparent;
+      color: $text-secondary;
+      border: 1.5px solid $border-light;
+      &:hover { border-color: $orange; color: $orange; background: $orange-glow; transform: translateY(-2px); }
     }
   }
 }
 
-
-
-.subtitle {
-  margin-bottom: 24px;
-  font-size: 1.1rem;
-  color: #444;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
+.darkmode .container { background: $bg-dark; }
+.darkmode .title { color: $text-dark; }
+.darkmode .subtitle { color: $text-dark2; }
+.darkmode .button-stack button:last-child {
+  border-color: $border-dark; color: $text-dark2;
+  &:hover { border-color: $orange; color: $orange; }
+}

@@ -1,64 +1,50 @@
-.todo-header-box {
-  color: #222;
-  padding: 24px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  max-width: 900px;
-  margin: 0 auto 30px auto;
+// 📁 src/css/todoheader.scss
+@import './_utils.scss';
 
-  .todo-title {
-    font-size: 28px;
-    margin-bottom: 8px;
-    font-weight: 700;
-    color: #111;
+.todo-header {
+  margin-bottom: 28px;
+
+  .todo-header-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: $text-primary;
+    letter-spacing: -1px;
+    margin: 0 0 4px;
   }
 
-  .todo-date {
-    color: #777;
-    margin-bottom: 16px;
-    font-size: 1rem;
-  }
-
-  .focus-box {
-    background: #f4f4f4;
-    padding: 18px;
-    border-radius: 10px;
-    text-align: center;
-    border: 1px solid #e0e0e0;
-
-    img {
-      width: 36px;
-      margin-bottom: 8px;
-    }
-
-    p {
-      font-size: 15px;
-      color: #333;
-      margin: 0;
-    }
+  .todo-header-date {
+    font-size: 0.9rem;
+    color: $text-muted;
+    margin: 0;
   }
 }
 
-// 💡 다크모드 스타일 오버라이드
-.darkmode .todo-header-box {
-  background: linear-gradient(to right, #2e2e2e, #1e1e1e);
-  color: white;
+.todo-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
 
-  .todo-title {
-    color: white;
-  }
+  .todo-tab {
+    padding: 7px 16px;
+    border-radius: $radius-sm;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: $text-muted;
+    transition: $transition;
+    font-family: $font-body;
 
-  .todo-date {
-    color: #ccc;
-  }
-
-  .focus-box {
-    background: #333;
-    border: 1px solid #444;
-
-    p {
-      color: #ccc;
+    &.active {
+      background: $orange-glow;
+      color: $orange;
+      font-weight: 600;
     }
+
+    &:hover:not(.active) { background: $bg-light; color: $text-secondary; }
   }
 }
+
+.darkmode .todo-header-title { color: $text-dark; }
+.darkmode .todo-tab:hover:not(.active) { background: $surface-dark2; }

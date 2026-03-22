@@ -1,91 +1,84 @@
-@import "./_utils.scss";
+// 📁 src/css/index.scss
+@import './_utils.scss';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 
-/* 기본 배경 및 폰트 설정 */
+*, *::before, *::after { box-sizing: border-box; }
+
 body, html, #root {
-  font-family: $font-family;
-  background-color: $bg-color;
+  font-family: $font-body;
+  background-color: $bg-light;
   margin: 0;
   padding: 0;
-  color: $text-color;
-  // ✅ display 속성 제거!
+  color: $text-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* 라이트 모드 스타일 */
 .lightmode {
-  background-color: #f5f5f5;
-  color: #222;
-
-  body, .header, .main-calendar-box, .main-today-box, .sidebar, .container {
-    background-color: #f5f5f5 !important;
-    color: #222 !important;
-  }
+  background-color: $bg-light;
+  color: $text-primary;
 }
 
-/* 다크 모드 스타일 */
 .darkmode {
-  background-color: #181818;
-  color: #eee;
+  background-color: $bg-dark;
+  color: $text-dark;
 
-  body, .header, .main-calendar-box, .main-today-box, .sidebar, .container {
-    background-color: #181818 !important;
-    color: #eee !important;
+  body, html, #root {
+    background-color: $bg-dark;
+    color: $text-dark;
   }
 }
 
-/* 컨테이너 레이아웃 */
 .container {
   @include flex-center;
   flex-direction: column;
   height: 100vh;
 }
 
-/* 제목 및 부제목 */
 .title {
   font-size: $font-lg;
-  color: $main-color;
+  color: $orange;
   margin-bottom: 10px;
+  font-weight: 700;
 }
 
 .subtitle {
   font-size: $font-md;
   margin-bottom: 20px;
+  color: $text-secondary;
 }
 
-/* 버튼 그룹 */
 .button-group {
   display: flex;
   gap: 10px;
+  button { @include button-primary; }
+}
 
-  button {
-    @include button-style();
+.mode-toggle-btn {
+  background: none;
+  border: 1.5px solid $border-light;
+  color: $text-secondary;
+  font-size: 0.9rem;
+  border-radius: $radius-sm;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: $transition;
+  font-family: $font-body;
+
+  &:hover {
+    background: $bg-light;
+    color: $text-primary;
+    border-color: $orange;
   }
 }
 
-/* 다크/라이트 모드 토글 버튼 */
-.mode-toggle-btn {
-  background: none;
-  border: 1.2px solid #bbb;
-  color: #888;
-  font-size: 1rem;
-  border-radius: 6px;
-  margin-right: 10px;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: background 0.17s, color 0.14s;
-}
-
-.mode-toggle-btn:hover {
-  background: #ededed;
-  color: #444;
-}
-
 .darkmode .mode-toggle-btn {
-  background: none;
-  border: 1.2px solid #444;
-  color: #bbb;
-}
+  border-color: $border-dark;
+  color: $text-dark2;
 
-.darkmode .mode-toggle-btn:hover {
-  background: #222;
-  color: #fff;
+  &:hover {
+    background: $surface-dark2;
+    color: $text-dark;
+    border-color: $orange;
+  }
 }

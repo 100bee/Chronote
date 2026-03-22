@@ -1,99 +1,88 @@
-// client/src/pages/ChatRoomPage.js
+// src/pages/ChatRoomPage.js
+import { Client } from '@stomp/stompjs';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { io } from 'socket.io-client';
+import SockJS from 'sockjs-client';
+import api from '../api/index';
 import '../css/chatroom.scss';
+import { getNickname, getToken, getUserId } from '../utils/auth';
 
-const socket = io("http://localhost:3001");
+const FASTAPI_URL = 'http://localhost:8000';
 
 const ChatRoomPage = () => {
   const { roomId } = useParams();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [roomTitle, setRoomTitle] = useState(''); // ✅ 채팅방 제목 상태
+  const [roomTitle, setRoomTitle] = useState('');
   const messagesEndRef = useRef(null);
-  const nickname = localStorage.getItem("nickname");
-  const myUserId = localStorage.getItem("user_id");
+  const stompClientRef = useRef(null);
+  const nickname = getNickname();
+  const myUserId = getUserId();
 
-  // ✅ 방 입장 + 제목/이전메시지 불러오기 + 소켓 리스너 등록
   useEffect(() => {
-    socket.emit('joinRoom', roomId);
+    // ✅ 채팅방 제목 - Spring Boot에서 가져오기
+    api.get(`/api/chatrooms/${roomId}`)
+      .then(res => setRoomTitle(res.data.title))
+      .catch(() => setRoomTitle('(제목 없음)'));
 
-    // ✅ 채팅방 제목 불러오기
-    const fetchRoomTitle = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8000/chatrooms/${roomId}`);
-        setRoomTitle(res.data.title);
-      } catch (err) {
-        console.error('❌ 채팅방 제목 불러오기 실패:', err);
-        setRoomTitle('(제목 없음)');
-      }
-    };
-
-    // ✅ FastAPI에서 이전 메시지 불러오기
-    const fetchMessages = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8000/messages/${roomId}`);
-        const fetched = res.data;
-
-        const processed = fetched.map(msg => ({
+    // ✅ 이전 메시지 - FastAPI에서 가져오기
+    axios.get(`${FASTAPI_URL}/messages/${roomId}`)
+      .then(res => {
+        setMessages(res.data.map(msg => ({
           ...msg,
-          sender: msg.sender === myUserId ? nickname : msg.sender
-        }));
+          sender: msg.sender === myUserId ? nickname : msg.sender,
+        })));
+      })
+      .catch(() => {});
 
-        setMessages(processed);
-      } catch (err) {
-        console.error('❌ 메시지 불러오기 실패:', err);
-      }
-    };
-
-    fetchRoomTitle();
-    fetchMessages();
-
-    socket.on('newMessage', (msg) => {
-      setMessages(prev => [...prev, msg]);
+    // ✅ STOMP WebSocket 연결
+    const client = new Client({
+      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+      onConnect: () => {
+        client.subscribe(`/topic/chat/${roomId}`, (message) => {
+          const received = JSON.parse(message.body);
+          setMessages(prev => [...prev, {
+            ...received,
+            sender: received.sender === myUserId ? nickname : received.sender,
+          }]);
+        });
+      },
+      onDisconnect: () => console.log('🔌 STOMP 연결 해제'),
+      onStompError: (frame) => console.error('❌ STOMP 오류:', frame),
     });
 
-    return () => {
-      socket.off('newMessage');
-    };
+    client.activate();
+    stompClientRef.current = client;
+    return () => client.deactivate();
   }, [roomId]);
 
-  // ✅ 채팅창 자동 스크롤
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // ✅ 메시지 전송
   const sendMessage = async () => {
-    if (input.trim() === '') return;
+    if (!input.trim()) return;
+    const token = getToken();
+    if (!token) { alert('로그인이 필요합니다.'); return; }
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      return;
+    const newMsg = { roomId, message: input, sender: nickname || '나' };
+
+    // ✅ STOMP 전송
+    if (stompClientRef.current?.connected) {
+      stompClientRef.current.publish({
+        destination: `/app/chat/${roomId}`,
+        body: JSON.stringify(newMsg),
+      });
     }
 
-    const newMsg = {
-      roomId,
-      message: input,
-      sender: nickname || '나', // ✅ 서버로도 닉네임 포함 전송
-    };
-
-    // ✅ 이벤트명 반드시 맞추기!
-    socket.emit('sendMessage', newMsg);
-
-    // (setMessages 직접 추가 X: 서버 broadcast로 동기화!)
-
+    // ✅ FastAPI 저장
     try {
-      await axios.post('http://localhost:8000/messages', newMsg, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
+      await axios.post(`${FASTAPI_URL}/messages`, newMsg, {
+        headers: { Authorization: `Bearer ${token}` },
       });
     } catch (err) {
-      console.error('📛 FastAPI 메시지 저장 실패:', err);
+      console.error('메시지 저장 실패:', err);
     }
 
     setInput('');
@@ -104,7 +93,6 @@ const ChatRoomPage = () => {
       <div className="chatroom-header">
         🗨️ 채팅방: {roomTitle} ({roomId})
       </div>
-
       <div className="chatroom-messages">
         {messages.map((msg, idx) => (
           <div
@@ -116,7 +104,6 @@ const ChatRoomPage = () => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-
       <div className="chatroom-input">
         <input
           type="text"

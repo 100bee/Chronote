@@ -1,29 +1,13 @@
+// 📁 src/css/match.scss
+@import './_utils.scss';
+
 .match-container {
-  padding-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
+  padding: 32px 40px;
 
-  .match-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: $text-color; // ⬅️ 텍스트 색상 통일
-  }
-
-  .match-button {
-    background-color: $main-color; // ⬅️ Chronote 메인 컬러 사용
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: darken($main-color, 5%);
-    }
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 20px;
   }
 }

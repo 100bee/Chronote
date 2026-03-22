@@ -1,30 +1,74 @@
-// src/css/_utils.scss
+// 📁 src/css/_utils.scss
+@import './variables';
 
-// ✅ 변수 정의
-$font-family: 'Noto Sans KR', sans-serif;
-$bg-color: #f5f5f5;
-$text-color: #333;
-$font-lg: 32px;
-$font-md: 18px;
-$main-color: #f97316;
+$font-family: $font-body;
+$bg-color:    $bg-light;
+$text-color:  $text-primary;
+$font-lg:     32px;
+$font-md:     18px;
+$main-color:  $orange;
 
-// ✅ mixin 정의 (index.scss에서 사용 중)
 @mixin flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-@mixin button-style() {
+@mixin card {
+  background: $surface-light;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  border: 1px solid $border-light;
+  transition: $transition;
+}
+
+@mixin card-dark {
+  background: $surface-dark;
+  border: 1px solid $border-dark;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+@mixin button-primary {
   padding: 10px 20px;
   font-size: 14px;
-  background-color: $main-color;
+  font-weight: 600;
+  background: $orange;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: $radius-sm;
   cursor: pointer;
+  transition: $transition;
+  font-family: $font-body;
 
   &:hover {
-    background-color: darken($main-color, 5%);
+    background: $orange-dark;
+    transform: translateY(-1px);
+    box-shadow: $shadow-orange;
   }
+
+  &:active { transform: translateY(0); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 }
+
+@mixin input-base {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1.5px solid $border-light;
+  border-radius: $radius-sm;
+  background: $bg-light;
+  color: $text-primary;
+  font-family: $font-body;
+  transition: $transition;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: $orange;
+    box-shadow: 0 0 0 3px $orange-glow;
+  }
+
+  &::placeholder { color: $text-muted; }
+}
+
+@mixin button-style() { @include button-primary; }
