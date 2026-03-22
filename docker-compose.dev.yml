@@ -1,0 +1,98 @@
+# 📁 C:\chronote\docker-compose.dev.yml
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: chronote-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: chronote
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    networks:
+      - chronote-net
+
+  mongodb:
+    image: mongo:7.0
+    container_name: chronote-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - chronote-net
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: chronote-server
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/chronote?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: 86400000
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: gpt-4.1-mini
+      MONGO_URI: mongodb://mongodb:27017
+      SPRING_SQL_INIT_MODE: never
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    restart: on-failure:5
+    networks:
+      - chronote-net
+
+  pyserver:
+    build:
+      context: ./pyserver
+      dockerfile: Dockerfile
+    container_name: chronote-pyserver
+    env_file:
+      - ./pyserver/.env
+    environment:
+      MONGO_URI: mongodb://mongodb:27017
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    restart: on-failure
+    networks:
+      - chronote-net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: chronote-client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+      - pyserver
+    networks:
+      - chronote-net
+
+volumes:
+  mysql-data:
+  mongo-data:
+
+networks:
+  chronote-net:
+    driver: bridge

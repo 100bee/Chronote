@@ -1,13 +1,16 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/chronote
+      uri: ${MONGO_URI:mongodb://localhost:27017/chronote}
 
   datasource:
-    url: jdbc:mysql://localhost:3306/chronote?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 1234
+    url: ${DB_URL:jdbc:mysql://localhost:3306/chronote?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 30000
+      initialization-fail-timeout: 0
 
   jpa:
     hibernate:
@@ -17,17 +20,24 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+
   sql:
     init:
-      mode: always
-server:
-  port: 8080
+      mode: never
+
   servlet:
     encoding:
       charset: UTF-8
       enabled: true
       force: true
 
+server:
+  port: 8080
+
 jwt:
-  secret: chronote-secret-key-please-change-this-in-production-256bit
-  expiration: 86400000
+  secret: ${JWT_SECRET:chronote-secret-key-please-change-this-in-production-256bit}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+openai:
+  api-key: ${OPENAI_API_KEY:}
+  model: ${OPENAI_MODEL:gpt-4.1-mini}

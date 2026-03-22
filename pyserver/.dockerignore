@@ -1,0 +1,7 @@
+# 📁 C:\chronote\pyserver\.dockerignore
+
+__pycache__
+*.pyc
+.git
+*.log
+.env

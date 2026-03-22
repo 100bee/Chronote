@@ -13,6 +13,7 @@ const Sidebar = () => {
     { label: '오늘 할 일', path: '/todos' },
     { label: '캘린더', path: '/calendar' },
     { label: '분석', path: '/analysis' }, // 🔄 향후 분석 페이지를 위한 자리
+    { label: 'AI 피드백', path: '/ai-feedback' }, // 🤖 AI 피드백 페이지를 위한 자리
   ];
 
   // 메뉴 클릭 시 해당 경로로 이동

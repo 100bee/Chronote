@@ -27,5 +27,8 @@ Thumbs.db
 test-results/
 coverage/
 
+# 📁 C:\chronote\server\.gitignore
+.env
+
 # HTTP 테스트 응답 파일
 src/main/resources/*.json

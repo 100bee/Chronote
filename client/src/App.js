@@ -5,7 +5,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
-
+import AiFeedback from './pages/AiFeedback';
 import Analysis from './pages/Analysis';
 import ChatRoomPage from './pages/ChatRoomPage';
 import FirstPage from './pages/FirstPage';
@@ -53,6 +53,7 @@ function App() {
           <Route path="/todos" element={<TodoDashboard />} />
           <Route path="/calendar" element={<TodoCalendar mode={mode} />} />
           <Route path="/analysis" element={<Analysis />} />
+          <Route path="/ai-feedback" element={<AiFeedback />} />  {/* ✅ 추가 */}
         </Route>
       </Routes>
     </>
