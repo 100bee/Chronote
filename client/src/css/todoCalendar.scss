@@ -1,0 +1,185 @@
+.calendar-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 56px;
+  padding: 40px 0;
+  min-height: 80vh;
+  background: #fff;
+  color: #232323;
+
+  .calendar-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 460px;
+    max-width: 640px;
+
+    h2 {
+      margin-bottom: 32px;
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #232323;
+    }
+
+    .calendar-container {
+      width: 440px;
+      min-width: 440px;
+      max-width: 560px;
+    }
+
+    .react-calendar {
+      width: 100% !important;
+      min-width: 440px;
+      font-size: 1.32rem;
+      padding: 38px;
+      border-radius: 22px;
+      box-shadow: 0 6px 36px 0 rgba(0, 0, 0, 0.13);
+      background: #fff;
+      color: #222;
+    }
+  }
+
+  .selected-date {
+    min-width: 350px;
+    max-width: 410px;
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 28px 26px;
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.11);
+
+    h3 {
+      margin: 0 0 18px 0;
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: #232323;
+    }
+
+    ul {
+      margin: 12px 0 18px 18px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 6px;
+      font-size: 1.07rem;
+    }
+
+    .add-task-section {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+
+      .task-input {
+        flex: 1;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #bbb;
+        font-size: 1rem;
+        outline: none;
+        background: #fff;
+        color: #222;
+      }
+
+      button {
+        background: #ff8c00;
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        padding: 0 18px;
+        transition: background 0.18s;
+        cursor: pointer;
+
+        &:hover {
+          background: #e07c00;
+        }
+      }
+    }
+  }
+}
+
+/* ✅ 다크모드 오버라이드 */
+.darkmode .calendar-page {
+  background: #181818;
+  color: #fff;
+
+  .calendar-left h2 {
+    color: #fff;
+  }
+
+  .calendar-left .react-calendar {
+    background: #232323;
+    color: #fff;
+    box-shadow: 0 6px 36px rgba(0, 0, 0, 0.24);
+  }
+
+  .selected-date {
+    background: #232323;
+    color: #fff;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.17);
+
+    h3 {
+      color: #fff;
+    }
+
+    .add-task-section .task-input {
+      background: #181818;
+      color: #fff;
+      border: 1px solid #666;
+    }
+  }
+}
+
+/* ✅ 캘린더 텍스트 컬러 (라이트/다크 공통) */
+.react-calendar,
+.react-calendar * {
+  color: #222 !important;
+}
+.darkmode .react-calendar,
+.darkmode .react-calendar * {
+  color: #fff !important;
+}
+
+/* ✅ 캘린더 날짜 강조 스타일 (공통 유지) */
+.react-calendar__navigation button {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.react-calendar__month-view__weekdays__weekday {
+  color: #444 !important;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.darkmode .react-calendar__month-view__weekdays__weekday {
+  color: #bbb !important;
+}
+.react-calendar__tile--now {
+  background: #ff8c0030 !important;
+  border-radius: 50%;
+}
+.react-calendar__tile--active {
+  background: #ff8c00 !important;
+  color: #fff !important;
+  border-radius: 50%;
+}
+.react-calendar__tile.has-task {
+  background-color: #ffcb05 !important;
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 8px;
+}
+.react-calendar__tile {
+  position: relative;
+}
+.react-calendar__tile .dot {
+  width: 6px;
+  height: 6px;
+  background-color: #ff8c00;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}

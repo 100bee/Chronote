@@ -33,6 +33,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").permitAll()  // (개발용)
                         .requestMatchers("/api/chatrooms/**").permitAll()
                         .requestMatchers("/api/messages/**").permitAll()
+                        .requestMatchers("/api/match/**").permitAll()
+                        .requestMatchers("/api/match/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )

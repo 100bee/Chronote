@@ -1,0 +1,91 @@
+@import "./_utils.scss";
+
+/* 기본 배경 및 폰트 설정 */
+body, html, #root {
+  font-family: $font-family;
+  background-color: $bg-color;
+  margin: 0;
+  padding: 0;
+  color: $text-color;
+  // ✅ display 속성 제거!
+}
+
+/* 라이트 모드 스타일 */
+.lightmode {
+  background-color: #f5f5f5;
+  color: #222;
+
+  body, .header, .main-calendar-box, .main-today-box, .sidebar, .container {
+    background-color: #f5f5f5 !important;
+    color: #222 !important;
+  }
+}
+
+/* 다크 모드 스타일 */
+.darkmode {
+  background-color: #181818;
+  color: #eee;
+
+  body, .header, .main-calendar-box, .main-today-box, .sidebar, .container {
+    background-color: #181818 !important;
+    color: #eee !important;
+  }
+}
+
+/* 컨테이너 레이아웃 */
+.container {
+  @include flex-center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* 제목 및 부제목 */
+.title {
+  font-size: $font-lg;
+  color: $main-color;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: $font-md;
+  margin-bottom: 20px;
+}
+
+/* 버튼 그룹 */
+.button-group {
+  display: flex;
+  gap: 10px;
+
+  button {
+    @include button-style();
+  }
+}
+
+/* 다크/라이트 모드 토글 버튼 */
+.mode-toggle-btn {
+  background: none;
+  border: 1.2px solid #bbb;
+  color: #888;
+  font-size: 1rem;
+  border-radius: 6px;
+  margin-right: 10px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.17s, color 0.14s;
+}
+
+.mode-toggle-btn:hover {
+  background: #ededed;
+  color: #444;
+}
+
+.darkmode .mode-toggle-btn {
+  background: none;
+  border: 1.2px solid #444;
+  color: #bbb;
+}
+
+.darkmode .mode-toggle-btn:hover {
+  background: #222;
+  color: #fff;
+}

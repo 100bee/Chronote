@@ -1,0 +1,38 @@
+.sidebar {
+  width: 220px;
+  background-color: #1e1e1e;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+}
+
+.sidebar-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #ff8c00; // 주황색 강조
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+
+  .menu-item {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: #ccc;
+    border-radius: 8px;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+      color: white;
+      background-color: #333;
+    }
+
+    &.active {
+      background-color: #ff8c00; // 주황색 강조
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
