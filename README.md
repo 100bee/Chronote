@@ -219,12 +219,4 @@ OPENAI_API_KEY=sk-...
 docker compose -f docker-compose.dev.yml up --build
 ```
 
-| 서비스 | 주소 |
-|--------|------|
-| Client | http://localhost:3000 |
-| API Server | http://localhost:8080 |
-| PyServer | http://localhost:8000 |
-| MySQL | localhost:3306 |
-| MongoDB | localhost:27017 |
-
 </details>
