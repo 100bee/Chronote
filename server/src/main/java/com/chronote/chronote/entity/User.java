@@ -36,11 +36,27 @@ public class User {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    // ✅ 추가
+    private LocalDateTime lastLoginAt;
+
+    public void updateLastLogin() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
+
     public void updateScore(int score) {
         this.score = score;
     }
 
     public void updateTier(String tier) {
         this.tier = tier;
+    }
+
+    public void deductScore(int amount) {
+        this.score = Math.max(0, this.score - amount);
+    }
+
+    public void resetScore() {
+        this.score = 0;
+        this.tier = "브론즈";
     }
 }

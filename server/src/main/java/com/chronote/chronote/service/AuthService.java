@@ -43,6 +43,10 @@ public class AuthService {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
+        // 마지막 로그인 시간 업데이트
+        user.updateLastLogin();
+        userRepository.save(user);
+
         return jwtTokenProvider.generateToken(user.getId(), user.getUserId(), user.getNickname());
     }
 }

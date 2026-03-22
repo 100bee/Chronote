@@ -51,3 +51,9 @@ Authorization: Bearer {{token}}
 ### 이번 달 출석 조회
 GET http://localhost:8080/api/attendance/monthly
 Authorization: Bearer {{token}}
+
+### 감점 테스트
+POST http://localhost:8080/api/admin/penalty
+
+### 초기화 테스트
+POST http://localhost:8080/api/admin/reset
