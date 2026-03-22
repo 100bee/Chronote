@@ -57,3 +57,22 @@ POST http://localhost:8080/api/admin/penalty
 
 ### 초기화 테스트
 POST http://localhost:8080/api/admin/reset
+
+### 채팅방 생성
+POST http://localhost:8080/api/chatrooms
+Content-Type: application/json
+
+{
+  "title": "스프링 스터디방"
+}
+
+> {% client.global.set("roomId", response.body.roomId); %}
+
+### 채팅방 전체 조회
+GET http://localhost:8080/api/chatrooms
+
+### 채팅방 단일 조회
+GET http://localhost:8080/api/chatrooms/{{roomId}}
+
+### 메시지 조회
+GET http://localhost:8080/api/messages/{{roomId}}

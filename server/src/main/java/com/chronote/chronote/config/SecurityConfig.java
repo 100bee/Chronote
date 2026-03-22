@@ -31,6 +31,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/rank").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()  // (개발용)
+                        .requestMatchers("/api/chatrooms/**").permitAll()
+                        .requestMatchers("/api/messages/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

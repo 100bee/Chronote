@@ -1,4 +1,8 @@
 spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/chronote
+
   datasource:
     url: jdbc:mysql://localhost:3306/chronote?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
