@@ -39,6 +39,7 @@ services:
       dockerfile: Dockerfile
     container_name: chronote-server
     environment:
+      PYSERVER_URL: http://pyserver:8000
       DB_URL: jdbc:mysql://mysql:3306/chronote?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
       DB_USERNAME: root
       DB_PASSWORD: ${DB_PASSWORD}
@@ -46,7 +47,7 @@ services:
       JWT_EXPIRATION: 86400000
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENAI_MODEL: gpt-4.1-mini
-      MONGO_URI: mongodb://mongodb:27017
+      MONGO_URI: mongodb://mongodb:27017/chronote
       SPRING_SQL_INIT_MODE: never
     ports:
       - "8080:8080"

@@ -1,8 +1,4 @@
 spring:
-  data:
-    mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/chronote}
-
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/chronote?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
     username: ${DB_USERNAME:root}
@@ -11,6 +7,9 @@ spring:
     hikari:
       connection-timeout: 30000
       initialization-fail-timeout: 0
+
+  mongodb:
+    uri: ${MONGO_URI:mongodb://localhost:27017/chronote}
 
   jpa:
     hibernate:
@@ -33,6 +32,9 @@ spring:
 
 server:
   port: 8080
+
+pyserver:
+  url: ${PYSERVER_URL:http://localhost:8000}
 
 jwt:
   secret: ${JWT_SECRET:chronote-secret-key-please-change-this-in-production-256bit}

@@ -1,0 +1,9 @@
+.env
+server/.env
+pyserver/.env
+client/.env
+docker-compose.override.yml
+.DS_Store
+Thumbs.db
+*.log
+logs/

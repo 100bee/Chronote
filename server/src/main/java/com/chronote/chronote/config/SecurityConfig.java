@@ -1,5 +1,3 @@
-// 📁 src/main/java/com/chronote/chronote/config/SecurityConfig.java
-
 package com.chronote.chronote.config;
 
 import com.chronote.chronote.security.JwtAuthFilter;
@@ -21,12 +19,12 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final CorsConfigurationSource corsConfigurationSource;  // ✅ 변경
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))  // ✅ 변경
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -38,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/messages/**").permitAll()
                         .requestMatchers("/api/match/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()  // ← 맨 마지막
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

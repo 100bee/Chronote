@@ -15,6 +15,9 @@ out/
 application-secret.yml
 .env
 
+# Docker
+Dockerfile
+
 # 로그
 *.log
 logs/
