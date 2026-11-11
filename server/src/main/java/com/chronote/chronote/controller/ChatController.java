@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -49,8 +50,9 @@ public class ChatController {
     // WebSocket - 메시지 전송
     @MessageMapping("/chat/{roomId}")
     public void sendMessage(@DestinationVariable String roomId,
-                            @Payload ChatDto chatDto) {
-        ChatMessage saved = chatService.saveMessage(roomId, chatDto.getSender(), chatDto.getMessage());
+                            @Payload ChatDto chatDto,
+                            Principal principal) {
+        ChatMessage saved = chatService.saveMessage(roomId, principal.getName(), chatDto.getMessage());
         messagingTemplate.convertAndSend("/topic/chat/" + roomId, saved);
     }
 }

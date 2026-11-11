@@ -52,15 +52,10 @@ Authorization: Bearer {{token}}
 GET http://localhost:8080/api/attendance/monthly
 Authorization: Bearer {{token}}
 
-### 감점 테스트
-POST http://localhost:8080/api/admin/penalty
-
-### 초기화 테스트
-POST http://localhost:8080/api/admin/reset
-
 ### 채팅방 생성
 POST http://localhost:8080/api/chatrooms
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "title": "스프링 스터디방"
@@ -80,6 +75,7 @@ GET http://localhost:8080/api/messages/{{roomId}}
 ### AI 매칭
 POST http://localhost:8080/api/match
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "userText": "수능 영어 스터디"
@@ -89,6 +85,7 @@ Content-Type: application/json
 ### AI 매칭
 POST http://localhost:8080/api/match
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "userText": "수능 영어 스터디"

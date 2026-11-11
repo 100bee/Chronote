@@ -4,6 +4,7 @@ import com.chronote.chronote.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,10 +32,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/rank").permitAll()
-                        .requestMatchers("/api/admin/**").permitAll()
-                        .requestMatchers("/api/chatrooms/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/chatrooms/**").permitAll()
                         .requestMatchers("/api/messages/**").permitAll()
-                        .requestMatchers("/api/match/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()  // ← 맨 마지막
                 )

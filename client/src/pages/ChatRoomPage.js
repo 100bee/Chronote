@@ -39,6 +39,7 @@ const ChatRoomPage = () => {
     // ✅ STOMP WebSocket 연결
     const client = new Client({
       webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+      connectHeaders: { Authorization: `Bearer ${getToken()}` },
       onConnect: () => {
         client.subscribe(`/topic/chat/${roomId}`, (message) => {
           const received = JSON.parse(message.body);
