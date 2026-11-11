@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '1234',  // ← 본인 설정에 맞게 변경!
+  password: process.env.MYSQL_PASSWORD,
   database: 'chronote_db',
   waitForConnections: true,
   connectionLimit: 10,

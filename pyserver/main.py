@@ -47,7 +47,9 @@ app.add_middleware(
 )
 
 # --- 4. JWT 설정 ---
-SECRET_KEY = os.environ.get("JWT_SECRET", "ROOT1234")
+SECRET_KEY = os.environ.get("JWT_SECRET")
+if not SECRET_KEY:
+    raise ValueError("JWT_SECRET 환경 변수가 설정되지 않았습니다.")
 ALGORITHM = "HS256"
 
 def get_current_user_id(request: Request) -> str:

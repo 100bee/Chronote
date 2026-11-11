@@ -7,7 +7,7 @@ const config = require(__dirname + '/../config/config.json')["development"];
 const sequelize = new Sequelize(
   config.database,
   config.username, 
-  config.password, 
+  process.env.MYSQL_PASSWORD,
   config);
 
 db.sequelize = sequelize;

@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const { User_info } = require("../models");
 
-const SECRET_KEY = "ROOT1234"; // .env에서 불러오게 하면 더 좋음
+const SECRET_KEY = process.env.JWT_SECRET;
 
 // JWT 토큰 생성 함수
 const generateToken = (user) => {
