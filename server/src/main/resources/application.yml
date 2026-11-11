@@ -37,7 +37,7 @@ pyserver:
   url: ${PYSERVER_URL:http://localhost:8000}
 
 jwt:
-  secret: ${JWT_SECRET:chronote-secret-key-please-change-this-in-production-256bit}
+  secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:86400000}
 
 openai:

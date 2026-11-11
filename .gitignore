@@ -7,3 +7,5 @@ docker-compose.override.yml
 Thumbs.db
 *.log
 logs/
+
+__pycache__/
